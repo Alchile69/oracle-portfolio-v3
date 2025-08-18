@@ -1,7 +1,9 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus, Zap, Factory, Database } from 'lucide-react';
+import { useCountry } from '../../contexts/CountryContext';
 
 const PhysicalIndicatorsCard = () => {
+  const { selectedCountry } = useCountry();
   const [data, setData] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
@@ -11,8 +13,8 @@ const PhysicalIndicatorsCard = () => {
       setIsLoading(true);
       setError(null);
       
-      // Utiliser le nouveau backend Python
-      const response = await fetch('https://oracle-backend-yrvjzoj3aa-uc.a.run.app/api/indicators/breakdown?country=France');
+      // Utiliser le nouveau backend Python avec le pays sélectionné
+      const response = await fetch(`https://oracle-backend-yrvjzoj3aa-uc.a.run.app/api/indicators/breakdown?country=${selectedCountry}`);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
@@ -25,14 +27,32 @@ const PhysicalIndicatorsCard = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue');
       console.error('Erreur fetch PhysicalIndicators:', err);
+      
+      // Fallback avec données simulées
+      setData({
+        indicators_breakdown: {
+          copper: { current_value: 8400, trend: 'up', impact: 'positive' },
+          oil: { current_value: 75, trend: 'down', impact: 'negative' },
+          gold: { current_value: 1950, trend: 'stable', impact: 'neutral' },
+          natural_gas: { current_value: 3.2, trend: 'up', impact: 'positive' }
+        },
+        overall_score: 0.65,
+        data_status: 'SIMULÉ',
+        country: selectedCountry,
+        timestamp: new Date().toISOString(),
+        message: 'Données simulées - API indisponible'
+      });
+      setError(null);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [selectedCountry]);
 
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (selectedCountry) {
+      fetchData();
+    }
+  }, [fetchData, selectedCountry]);
 
   const getIndicatorIcon = (indicator) => {
     switch (indicator) {
@@ -200,30 +220,30 @@ const PhysicalIndicatorsCard = () => {
 
                 <div className="space-y-3">
                   {/* Valeur actuelle */}
-                                  <div className="flex justify-between items-center">
-                  <span className="text-[#cccccc] text-xs">Valeur actuelle</span>
-                  <span className="font-bold text-white text-sm">
-                    {formatNumber(indicator.current_value)}
-                  </span>
-                </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#cccccc] text-xs">Valeur actuelle</span>
+                    <span className="font-bold text-white text-sm">
+                      {formatNumber(indicator.current_value)}
+                    </span>
+                  </div>
 
-                {/* Trend */}
-                <div className="flex justify-between items-center">
-                  <span className="text-[#cccccc] text-xs">Tendance</span>
-                  <span className="text-white text-sm">
-                    {indicator.trend === 'up' ? '↗️ Hausse' : 
-                     indicator.trend === 'down' ? '↘️ Baisse' : '→ Stable'}
-                  </span>
-                </div>
+                  {/* Trend */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#cccccc] text-xs">Tendance</span>
+                    <span className="text-white text-sm">
+                      {indicator.trend === 'up' ? '↗️ Hausse' : 
+                       indicator.trend === 'down' ? '↘️ Baisse' : '→ Stable'}
+                    </span>
+                  </div>
 
-                {/* Impact */}
-                <div className="flex justify-between items-center">
-                  <span className="text-[#cccccc] text-xs">Impact</span>
-                  <span className={`font-medium text-xs ${getImpactColor(indicator.impact)}`}>
-                    {indicator.impact === 'positive' ? 'Positif' : 
-                     indicator.impact === 'negative' ? 'Négatif' : 'Neutre'}
-                  </span>
-                </div>
+                  {/* Impact */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#cccccc] text-xs">Impact</span>
+                    <span className={`font-medium text-xs ${getImpactColor(indicator.impact)}`}>
+                      {indicator.impact === 'positive' ? 'Positif' : 
+                       indicator.impact === 'negative' ? 'Négatif' : 'Neutre'}
+                    </span>
+                  </div>
 
                   {/* Barre de progression impact */}
                   <div className="w-full bg-[#2a2a3e] rounded-full h-2">
