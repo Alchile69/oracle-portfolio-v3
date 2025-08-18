@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { BarChart3, TrendingUp, Activity } from 'lucide-react';
 
 const AnalyticsModule = () => {
