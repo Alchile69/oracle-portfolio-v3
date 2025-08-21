@@ -6,6 +6,7 @@ import ExtensibleConfigurationPanel from './components/admin/ExtensibleConfigura
 import PluginWizard from './components/admin/PluginWizard';
 import SectorsModule from './components/sectors/SectorsModule';
 import EssentialsModule from './components/essentials/EssentialsModule';
+import PortfolioKPICards from './components/portfolio/PortfolioKPICards';
 import pluginSystem from './utils/PluginSystem';
 import './App.css';
 
@@ -91,7 +92,8 @@ function App() {
         );
       case 'analytics':
         return (
-          <div className="analytics-placeholder">
+          <div className="analytics-placeholder" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+            <PortfolioKPICards />
             <h2>📈 Analytics</h2>
             <p>Module d'analytics en développement...</p>
           </div>

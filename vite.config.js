@@ -56,6 +56,12 @@ export default defineConfig({
   // Configuration du serveur
   server: {
     port: 3000,
-    host: true
+    host: true,
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '5174-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer',
+      '5173-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer'
+    ]
   }
 })
