@@ -13,8 +13,9 @@ const PhysicalIndicatorsCard = () => {
       setIsLoading(true);
       setError(null);
       
-      // Utiliser le nouveau backend Python avec le pays sélectionné
-      const response = await fetch(`https://oracle-backend-yrvjzoj3aa-uc.a.run.app/api/indicators/breakdown?country=${selectedCountry}`);
+      // WOW V1 - Backend Railway avec variable d'environnement
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
+      const response = await fetch(`${BACKEND_URL}/api/indicators/breakdown?country=${selectedCountry}`);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }

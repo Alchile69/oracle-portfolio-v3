@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useCountry } from '../contexts/CountryContext';
 
-// STRUCTURE 2 - Backend Python Cloud Run URLs
-const BACKEND_BASE_URL = 'https://oracle-backend-yrvjzoj3aa-uc.a.run.app';
+// WOW V1 - Backend Railway avec variable d'environnement
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
 
 // Données de fallback pour les régimes économiques
 const FALLBACK_REGIME_DATA = {

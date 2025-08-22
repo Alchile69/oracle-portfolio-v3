@@ -194,7 +194,7 @@ const ConfigurationModule = () => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-[#0f0f23] rounded-lg">
                   <span className="text-[#cccccc]">Backend URL</span>
-                  <span className="text-white font-mono text-sm">oracle-backend-yrvjzoj3aa-uc.a.run.app</span>
+                  <span className="text-white font-mono text-sm">oracle-backend-wow-v1-production.up.railway.app</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-[#0f0f23] rounded-lg">
                   <span className="text-[#cccccc]">API Version</span>
