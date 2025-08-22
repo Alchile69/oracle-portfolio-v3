@@ -7,6 +7,7 @@ import PluginWizard from './components/admin/PluginWizard';
 import SectorsModule from './components/sectors/SectorsModule';
 import EssentialsModule from './components/essentials/EssentialsModule';
 import PortfolioKPICards from './components/portfolio/PortfolioKPICards';
+import AssetAllocationPieChart from './components/portfolio/AssetAllocationPieChart';
 import pluginSystem from './utils/PluginSystem';
 import './App.css';
 
@@ -94,6 +95,9 @@ function App() {
         return (
           <div className="analytics-placeholder" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
             <PortfolioKPICards />
+            <div style={{ marginTop: '30px' }}>
+              <AssetAllocationPieChart />
+            </div>
             <h2>📈 Analytics</h2>
             <p>Module d'analytics en développement...</p>
           </div>
