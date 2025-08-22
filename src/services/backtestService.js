@@ -1,7 +1,8 @@
 // WOW V1 - Backend Service
 // Integration avec le nouveau backend FastAPI + Yahoo Finance
 
-const BACKEND_URL = 'https://8000-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer';
+// Configuration dynamique de l'URL backend
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
 
 export class BacktestService {
   /**
