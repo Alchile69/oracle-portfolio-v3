@@ -8,6 +8,7 @@ import SectorsModule from './components/sectors/SectorsModule';
 import EssentialsModule from './components/essentials/EssentialsModule';
 import PortfolioKPICards from './components/portfolio/PortfolioKPICards';
 import AssetAllocationPieChart from './components/portfolio/AssetAllocationPieChart';
+import { ToastContainer, useToast } from './components/ui/ToastNotification';
 import pluginSystem from './utils/PluginSystem';
 import './App.css';
 
@@ -17,6 +18,9 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPluginWizard, setShowPluginWizard] = useState(false);
   const [wizardType, setWizardType] = useState('');
+  
+  // Hook pour les toasts
+  const toast = useToast();
 
   // Version mise à jour
   const appVersion = "Oracle Portfolio Real-time market data and portfolio analysis";
@@ -373,6 +377,12 @@ function App() {
           }
         `}</style>
       </div>
+      
+      {/* Toast Container */}
+      <ToastContainer 
+        toasts={toast.toasts} 
+        onRemove={toast.removeToast} 
+      />
     </CountryProvider>
   );
 }

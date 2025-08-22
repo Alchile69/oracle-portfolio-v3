@@ -1,31 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import * as TWEEN from '@tweenjs/tween.js';
-import FirebaseService from '../../services/firebaseService';
+import { FirebaseService } from '../../services/firebaseService';
+import { useToast } from '../ui/ToastNotification';
+import { LoadingButton } from '../ui/LoadingSpinner';
 
 // Enregistrement des composants Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AssetAllocationPieChart = () => {
-  const chartRef = useRef(null);
+  // États principaux
   const [allocations, setAllocations] = useState({
     stocks: 60,
     bonds: 25,
     commodities: 10,
     cash: 5
   });
-  
-  const [isDragging, setIsDragging] = useState(false);
-  const [draggedAsset, setDraggedAsset] = useState(null);
-  const [animatedAllocations, setAnimatedAllocations] = useState(allocations);
-  
-  // États pour Firebase
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState(null);
-  const [saveStatus, setSaveStatus] = useState(''); // 'success', 'error', ''
+
+  // États UI améliorés
   const [isFirebaseConnected, setIsFirebaseConnected] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Hooks
+  const toast = useToast();
+  const chartRef = useRef(null);
 
   // Configuration des couleurs et labels
   const assetConfig = {
@@ -189,35 +190,26 @@ const AssetAllocationPieChart = () => {
     loadAllocations();
   }, []);
 
-  // Sauvegarde des allocations dans Firestore
-  const saveToFirestore = async () => {
-    if (!isFirebaseConnected) {
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus(''), 3000);
-      return;
-    }
-
+  // Sauvegarde des allocations dans Firebase
+  const savePortfolio = async () => {
     try {
       setIsSaving(true);
-      setSaveStatus('');
       
       const success = await FirebaseService.savePortfolioAllocations(allocations);
       
       if (success) {
-        setSaveStatus('success');
         setLastSaved(new Date());
+        toast.success('Portfolio sauvegardé avec succès !', 2000);
         console.log('💾 Allocations sauvegardées avec succès');
       } else {
-        setSaveStatus('error');
+        toast.error('Échec de la sauvegarde du portfolio', 3000);
         console.error('❌ Échec de la sauvegarde');
       }
     } catch (error) {
-      setSaveStatus('error');
+      toast.error('Erreur lors de la sauvegarde', 3000);
       console.error('❌ Erreur sauvegarde:', error);
     } finally {
       setIsSaving(false);
-      // Effacer le statut après 3 secondes
-      setTimeout(() => setSaveStatus(''), 3000);
     }
   };
 
@@ -407,51 +399,20 @@ const AssetAllocationPieChart = () => {
           
           {/* Boutons Firebase */}
           <div className="mt-6 space-y-3">
-            {/* Bouton Save Portfolio */}
-            <button
-              onClick={saveToFirestore}
-              disabled={isSaving || !isFirebaseConnected}
+            {/* Bouton Save Portfolio avec LoadingButton */}
+            <LoadingButton
+              onClick={savePortfolio}
+              loading={isSaving}
+              disabled={!isFirebaseConnected}
               className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
-                isSaving 
-                  ? 'bg-[#4b5563] text-[#cccccc] cursor-not-allowed'
-                  : isFirebaseConnected
-                    ? 'bg-[#00ff88] text-black hover:bg-[#00cc6a] hover:shadow-lg'
-                    : 'bg-[#6b7280] text-[#cccccc] cursor-not-allowed'
+                isFirebaseConnected
+                  ? 'bg-[#00ff88] text-black hover:bg-[#00cc6a] hover:shadow-lg'
+                  : 'bg-[#6b7280] text-[#cccccc] cursor-not-allowed'
               }`}
             >
-              {isSaving ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-[#cccccc] border-t-transparent rounded-full animate-spin"></div>
-                  <span>Saving...</span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center space-x-2">
-                  <span>💾</span>
-                  <span>Save Portfolio</span>
-                </div>
-              )}
-            </button>
-
-            {/* Statut de sauvegarde */}
-            {saveStatus && (
-              <div className={`p-3 rounded-lg text-center text-sm font-medium ${
-                saveStatus === 'success' 
-                  ? 'bg-[#00ff88] bg-opacity-20 text-[#00ff88] border border-[#00ff88]'
-                  : 'bg-[#ef4444] bg-opacity-20 text-[#ef4444] border border-[#ef4444]'
-              }`}>
-                {saveStatus === 'success' ? (
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>✅</span>
-                    <span>Portfolio saved successfully!</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>❌</span>
-                    <span>Failed to save portfolio</span>
-                  </div>
-                )}
-              </div>
-            )}
+              <span>💾</span>
+              <span>Save Portfolio</span>
+            </LoadingButton>
 
             {/* Informations de connexion */}
             <div className="flex items-center justify-between text-xs text-[#cccccc]">
