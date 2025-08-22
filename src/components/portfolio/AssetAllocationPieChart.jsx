@@ -24,6 +24,9 @@ const AssetAllocationPieChart = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
+  // États pour les animations
+  const [animatedAllocations, setAnimatedAllocations] = useState(allocations);
+  
   // Hooks
   const toast = useToast();
   const chartRef = useRef(null);
