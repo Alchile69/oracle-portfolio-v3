@@ -14,8 +14,9 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [dataSource, setDataSource] = useState('loading');
+  const [realData, setRealData] = useState(null);
 
-  // Données de test si pas de données
+  // Données de test par défaut
   const defaultData = {
     returns: 12.5,
     volatility: 15.3,
@@ -31,13 +32,14 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     const fetchRealData = async () => {
       try {
         setIsLoading(true);
+        console.log('🔍 Récupération des données backend...');
         const metrics = await BacktestService.getPortfolioMetrics();
+        console.log('📊 Données reçues:', metrics);
         
         // Utiliser les données du backend si disponibles
         if (metrics && metrics.source !== 'fallback_frontend') {
           setDataSource(metrics.source || 'backend');
-          // Mettre à jour les données par défaut avec les vraies données
-          Object.assign(defaultData, {
+          setRealData({
             returns: metrics.returns || defaultData.returns,
             volatility: metrics.volatility || defaultData.volatility,
             sharpe: metrics.sharpe || defaultData.sharpe,
@@ -45,12 +47,16 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
             winRate: metrics.winRate || defaultData.winRate,
             beta: metrics.beta || defaultData.beta
           });
+          console.log('✅ Données réelles chargées');
         } else {
           setDataSource('fallback');
+          setRealData(defaultData);
+          console.log('⚠️ Utilisation des données de fallback');
         }
       } catch (error) {
-        console.error('Erreur récupération données backend:', error);
+        console.error('❌ Erreur récupération données backend:', error);
         setDataSource('error');
+        setRealData(defaultData);
       } finally {
         setIsLoading(false);
       }
@@ -59,10 +65,16 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     fetchRealData();
   }, []);
 
-  const data = { ...defaultData, ...portfolioData };
+  // Données finales à utiliser
+  const data = realData ? { ...realData, ...portfolioData } : { ...defaultData, ...portfolioData };
 
-  // Animation des nombres au montage
+  // Animation des nombres après chargement des données
   useEffect(() => {
+    // Ne pas animer si les données ne sont pas encore chargées
+    if (isLoading || !realData) return;
+
+    console.log('🎬 Démarrage des animations avec les données:', data);
+
     const animate = () => {
       TWEEN.update();
       requestAnimationFrame(animate);
@@ -132,7 +144,7 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
       tweenWinRate.stop();
       tweenBeta.stop();
     };
-  }, [data.returns, data.volatility, data.sharpe, data.drawdown, data.winRate, data.beta]);
+  }, [isLoading, realData, data.returns, data.volatility, data.sharpe, data.drawdown, data.winRate, data.beta]);
 
   const KPICard = ({ title, value, unit, icon, positive, tooltip }) => {
     const isPositive = positive ?? value >= 0;
