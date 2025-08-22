@@ -166,7 +166,13 @@ const AssetAllocationPieChart = () => {
           if (savedData && savedData.allocations) {
             console.log('📥 Allocations chargées depuis Firestore');
             setAllocations(savedData.allocations);
-            setLastSaved(savedData.metadata?.lastUpdated);
+            
+            // Conversion correcte du timestamp Firestore
+            if (savedData.metadata?.lastUpdated) {
+              const timestamp = savedData.metadata.lastUpdated;
+              const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+              setLastSaved(date);
+            }
           } else {
             console.log('📭 Aucune allocation sauvegardée, utilisation des valeurs par défaut');
           }
@@ -459,7 +465,14 @@ const AssetAllocationPieChart = () => {
               </div>
               {lastSaved && (
                 <span>
-                  Last saved: {lastSaved.toLocaleTimeString()}
+                  Last saved: {
+                    lastSaved.toDate ? 
+                      lastSaved.toDate().toLocaleTimeString() : 
+                      (lastSaved instanceof Date ? 
+                        lastSaved.toLocaleTimeString() : 
+                        'Unknown'
+                      )
+                  }
                 </span>
               )}
             </div>
