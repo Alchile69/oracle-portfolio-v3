@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as TWEEN from '@tweenjs/tween.js';
+import BacktestService from '../../services/backtestService';
 
 const PortfolioKPICards = ({ portfolioData = {} }) => {
   const [animatedValues, setAnimatedValues] = useState({
@@ -11,6 +12,9 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     beta: 0
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataSource, setDataSource] = useState('loading');
+
   // Données de test si pas de données
   const defaultData = {
     returns: 12.5,
@@ -21,6 +25,39 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     winRate: 67.5,
     beta: 0.85
   };
+
+  // Récupération des données réelles du backend
+  useEffect(() => {
+    const fetchRealData = async () => {
+      try {
+        setIsLoading(true);
+        const metrics = await BacktestService.getPortfolioMetrics();
+        
+        // Utiliser les données du backend si disponibles
+        if (metrics && metrics.source !== 'fallback_frontend') {
+          setDataSource(metrics.source || 'backend');
+          // Mettre à jour les données par défaut avec les vraies données
+          Object.assign(defaultData, {
+            returns: metrics.returns || defaultData.returns,
+            volatility: metrics.volatility || defaultData.volatility,
+            sharpe: metrics.sharpe || defaultData.sharpe,
+            drawdown: metrics.drawdown || defaultData.drawdown,
+            winRate: metrics.winRate || defaultData.winRate,
+            beta: metrics.beta || defaultData.beta
+          });
+        } else {
+          setDataSource('fallback');
+        }
+      } catch (error) {
+        console.error('Erreur récupération données backend:', error);
+        setDataSource('error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRealData();
+  }, []);
 
   const data = { ...defaultData, ...portfolioData };
 
@@ -184,14 +221,35 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
 
   return (
     <div style={{ width: '100%', marginBottom: '32px' }}>
-      <h2 style={{ 
-        color: '#fff', 
-        marginBottom: '24px', 
-        fontWeight: 'bold',
-        fontSize: '24px'
-      }}>
-        📊 Portfolio Performance KPIs
-      </h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+        <h2 style={{ 
+          color: '#fff', 
+          fontWeight: 'bold',
+          fontSize: '24px',
+          margin: 0
+        }}>
+          📊 Portfolio Performance KPIs
+        </h2>
+        <div style={{ 
+          fontSize: '12px', 
+          color: dataSource === 'yahoo_finance' ? '#22c55e' : '#94a3b8',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <div style={{ 
+            width: '8px', 
+            height: '8px', 
+            borderRadius: '50%', 
+            backgroundColor: dataSource === 'yahoo_finance' ? '#22c55e' : '#94a3b8' 
+          }}></div>
+          {isLoading ? 'Chargement...' : 
+           dataSource === 'yahoo_finance' ? 'Données réelles (Yahoo Finance)' :
+           dataSource === 'fallback' ? 'Données de test' :
+           dataSource === 'error' ? 'Erreur - Données de test' :
+           'Données de test'}
+        </div>
+      </div>
       
       {/* Grille 3x2 comme dans la capture d'écran */}
       <div style={{ 
