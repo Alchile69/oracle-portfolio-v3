@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import * as TWEEN from '@tweenjs/tween.js';
+import FirebaseService from '../../services/firebaseService';
 
 // Enregistrement des composants Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -18,6 +19,13 @@ const AssetAllocationPieChart = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedAsset, setDraggedAsset] = useState(null);
   const [animatedAllocations, setAnimatedAllocations] = useState(allocations);
+  
+  // États pour Firebase
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  const [saveStatus, setSaveStatus] = useState(''); // 'success', 'error', ''
+  const [isFirebaseConnected, setIsFirebaseConnected] = useState(false);
 
   // Configuration des couleurs et labels
   const assetConfig = {
@@ -139,6 +147,97 @@ const AssetAllocationPieChart = () => {
     }
   };
 
+  // ===== FONCTIONS FIREBASE =====
+  
+  // Chargement initial des allocations depuis Firestore
+  useEffect(() => {
+    const loadAllocations = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Test de connexion Firebase
+        const connected = await FirebaseService.testConnection();
+        setIsFirebaseConnected(connected);
+        
+        if (connected) {
+          // Récupérer les allocations sauvegardées
+          const savedData = await FirebaseService.getPortfolioAllocations();
+          
+          if (savedData && savedData.allocations) {
+            console.log('📥 Allocations chargées depuis Firestore');
+            setAllocations(savedData.allocations);
+            setLastSaved(savedData.metadata?.lastUpdated);
+          } else {
+            console.log('📭 Aucune allocation sauvegardée, utilisation des valeurs par défaut');
+          }
+        } else {
+          console.log('⚠️ Firebase non connecté, utilisation des valeurs par défaut');
+        }
+      } catch (error) {
+        console.error('❌ Erreur chargement allocations:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAllocations();
+  }, []);
+
+  // Sauvegarde des allocations dans Firestore
+  const saveToFirestore = async () => {
+    if (!isFirebaseConnected) {
+      setSaveStatus('error');
+      setTimeout(() => setSaveStatus(''), 3000);
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      setSaveStatus('');
+      
+      const success = await FirebaseService.savePortfolioAllocations(allocations);
+      
+      if (success) {
+        setSaveStatus('success');
+        setLastSaved(new Date());
+        console.log('💾 Allocations sauvegardées avec succès');
+      } else {
+        setSaveStatus('error');
+        console.error('❌ Échec de la sauvegarde');
+      }
+    } catch (error) {
+      setSaveStatus('error');
+      console.error('❌ Erreur sauvegarde:', error);
+    } finally {
+      setIsSaving(false);
+      // Effacer le statut après 3 secondes
+      setTimeout(() => setSaveStatus(''), 3000);
+    }
+  };
+
+  // Réinitialisation aux valeurs par défaut
+  const resetToDefaults = async () => {
+    try {
+      const defaultAllocations = {
+        stocks: 60,
+        bonds: 25,
+        commodities: 10,
+        cash: 5
+      };
+      
+      setAllocations(defaultAllocations);
+      
+      if (isFirebaseConnected) {
+        await FirebaseService.resetToDefaults();
+        console.log('🔄 Allocations réinitialisées');
+      }
+    } catch (error) {
+      console.error('❌ Erreur réinitialisation:', error);
+    }
+  };
+
+  // ===== FIN FONCTIONS FIREBASE =====
+
   // Gestion du drag & drop pour modifier les allocations
   const handleSliderChange = (assetKey, newValue) => {
     const oldValue = allocations[assetKey];
@@ -229,7 +328,7 @@ const AssetAllocationPieChart = () => {
             Aggressive
           </button>
           <button
-            onClick={resetAllocations}
+            onClick={resetToDefaults}
             className="px-3 py-1 text-xs bg-[#6b7280] text-white rounded-lg hover:bg-[#4b5563] transition-colors"
             title="Reset to default"
           >
@@ -300,6 +399,80 @@ const AssetAllocationPieChart = () => {
             </div>
           ))}
           
+          {/* Boutons Firebase */}
+          <div className="mt-6 space-y-3">
+            {/* Bouton Save Portfolio */}
+            <button
+              onClick={saveToFirestore}
+              disabled={isSaving || !isFirebaseConnected}
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
+                isSaving 
+                  ? 'bg-[#4b5563] text-[#cccccc] cursor-not-allowed'
+                  : isFirebaseConnected
+                    ? 'bg-[#00ff88] text-black hover:bg-[#00cc6a] hover:shadow-lg'
+                    : 'bg-[#6b7280] text-[#cccccc] cursor-not-allowed'
+              }`}
+            >
+              {isSaving ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-[#cccccc] border-t-transparent rounded-full animate-spin"></div>
+                  <span>Saving...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center space-x-2">
+                  <span>💾</span>
+                  <span>Save Portfolio</span>
+                </div>
+              )}
+            </button>
+
+            {/* Statut de sauvegarde */}
+            {saveStatus && (
+              <div className={`p-3 rounded-lg text-center text-sm font-medium ${
+                saveStatus === 'success' 
+                  ? 'bg-[#00ff88] bg-opacity-20 text-[#00ff88] border border-[#00ff88]'
+                  : 'bg-[#ef4444] bg-opacity-20 text-[#ef4444] border border-[#ef4444]'
+              }`}>
+                {saveStatus === 'success' ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>✅</span>
+                    <span>Portfolio saved successfully!</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>❌</span>
+                    <span>Failed to save portfolio</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Informations de connexion */}
+            <div className="flex items-center justify-between text-xs text-[#cccccc]">
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  isFirebaseConnected ? 'bg-[#00ff88]' : 'bg-[#ef4444]'
+                }`}></div>
+                <span>
+                  {isFirebaseConnected ? 'Firebase Connected' : 'Firebase Disconnected'}
+                </span>
+              </div>
+              {lastSaved && (
+                <span>
+                  Last saved: {lastSaved.toLocaleTimeString()}
+                </span>
+              )}
+            </div>
+
+            {/* Bouton Reset */}
+            <button
+              onClick={resetToDefaults}
+              className="w-full py-2 px-4 bg-[#6b7280] text-white rounded-lg hover:bg-[#4b5563] transition-colors text-sm"
+            >
+              🔄 Reset to Defaults
+            </button>
+          </div>
+
           {/* Résumé */}
           <div className="mt-6 p-4 bg-[#0f0f23] rounded-lg border border-[#2a2a4e]">
             <div className="text-sm text-[#cccccc] mb-2">Portfolio Summary</div>
