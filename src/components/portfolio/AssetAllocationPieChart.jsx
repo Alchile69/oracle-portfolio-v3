@@ -202,7 +202,21 @@ const AssetAllocationPieChart = () => {
       
       if (success) {
         setLastSaved(new Date());
+        
+        // Toast de succès
         toast.success('Portfolio sauvegardé avec succès !', 2000);
+        
+        // Animation visuelle de confirmation
+        const button = document.querySelector('[data-save-button]');
+        if (button) {
+          button.style.transform = 'scale(1.05)';
+          button.style.backgroundColor = '#00ff88';
+          setTimeout(() => {
+            button.style.transform = 'scale(1)';
+            button.style.backgroundColor = '';
+          }, 300);
+        }
+        
         console.log('💾 Allocations sauvegardées avec succès');
       } else {
         toast.error('Échec de la sauvegarde du portfolio', 3000);
@@ -407,6 +421,7 @@ const AssetAllocationPieChart = () => {
               onClick={savePortfolio}
               loading={isSaving}
               disabled={!isFirebaseConnected}
+              data-save-button="true"
               className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
                 isFirebaseConnected
                   ? 'bg-[#00ff88] text-black hover:bg-[#00cc6a] hover:shadow-lg'
