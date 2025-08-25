@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import * as TWEEN from '@tweenjs/tween.js';
 import { FirebaseService } from '../../services/firebaseService';
 import { useToast } from '../ui/ToastNotification';
 import { LoadingButton } from '../ui/LoadingSpinner';
+import { useDebouncedCallback } from '../../hooks/useDebounce';
 
 // Enregistrement des composants Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -265,8 +266,8 @@ const AssetAllocationPieChart = () => {
 
   // ===== FIN FONCTIONS FIREBASE =====
 
-  // Gestion du drag & drop pour modifier les allocations
-  const handleSliderChange = (assetKey, newValue) => {
+  // Gestion du drag & drop pour modifier les allocations avec debounce
+  const debouncedSliderChange = useDebouncedCallback((assetKey, newValue) => {
     const oldValue = allocations[assetKey];
     const difference = newValue - oldValue;
     
@@ -292,6 +293,10 @@ const AssetAllocationPieChart = () => {
       
       setAllocations(newAllocations);
     }
+  }, 150); // Debounce de 150ms pour une réactivité optimale
+
+  const handleSliderChange = (assetKey, newValue) => {
+    debouncedSliderChange(assetKey, newValue);
   };
 
   // Réinitialiser les allocations

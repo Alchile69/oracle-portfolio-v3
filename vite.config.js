@@ -61,7 +61,8 @@ export default defineConfig({
       'localhost',
       '127.0.0.1',
       '5174-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer',
-      '5173-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer'
+      '5173-i25jmksazrl5jpgvweo9c-48c9de64.manusvm.computer',
+      '5173-ifd0vm2tir9fieilqed3w-10979104.manusvm.computer'
     ]
   }
 })

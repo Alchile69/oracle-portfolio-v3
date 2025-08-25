@@ -1,3 +1,11 @@
+/**
+ * @file App.jsx
+ * @description Composant principal de l'application Oracle Portfolio V3.
+ * Gère la navigation, l'authentification, les plugins et l'affichage des vues.
+ * @version 3.0.0
+ * @date 2025-08-25
+ */
+
 import React, { useState, useEffect } from 'react';
 import { CountryProvider } from './contexts/CountryContext';
 import Dashboard from './components/layout/Dashboard';
@@ -10,47 +18,61 @@ import PortfolioKPICards from './components/portfolio/PortfolioKPICards';
 import AssetAllocationPieChart from './components/portfolio/AssetAllocationPieChart';
 import { ToastContainer, useToast } from './components/ui/ToastNotification';
 import pluginSystem from './utils/PluginSystem';
-import './App.css';
 
+// Import des styles globaux
+import './App.css';
+import './styles/responsive.css';
+import './styles/glassmorphism.css';
+import './styles/animations.css';
+
+/**
+ * Composant principal de l'application
+ * @returns {JSX.Element}
+ */
 function App() {
-  const [currentView, setCurrentView] = useState('dashboard');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showPluginWizard, setShowPluginWizard] = useState(false);
-  const [wizardType, setWizardType] = useState('');
+  // ===== ÉTATS =====
+  const [currentView, setCurrentView] = useState('dashboard'); // Vue actuelle (dashboard, analytics, etc.)
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Statut d'authentification
+  const [showLoginModal, setShowLoginModal] = useState(false); // Affichage du modal de connexion
+  const [showPluginWizard, setShowPluginWizard] = useState(false); // Affichage de l'assistant de plugins
+  const [wizardType, setWizardType] = useState(''); // Type de plugin à créer
   
-  // Hook pour les toasts
+  // Hook pour les notifications toast
   const toast = useToast();
 
-  // Version mise à jour
+  // Version de l'application
   const appVersion = "Oracle Portfolio Real-time market data and portfolio analysis";
 
-  // Initialisation du système de plugins
+  // ===== EFFETS =====
+  // Initialisation du système de plugins au chargement de l'application
   useEffect(() => {
     const initializePlugins = async () => {
       try {
-        // Chargement des plugins par défaut
         console.log('🔌 Initialisation du système de plugins...');
         
-        // Hooks d'exemple
+        // Ajout de hooks pour observer les événements du système de plugins
         pluginSystem.addHook('after_add', (data) => {
           console.log(`✅ Plugin ${data.type} "${data.plugin.name}" ajouté`);
-          // Ici on pourrait déclencher une mise à jour de l'interface
+          toast.success(`Plugin "${data.plugin.name}" ajouté !`);
         });
 
         pluginSystem.addHook('after_delete', (data) => {
           console.log(`🗑️ Plugin ${data.type} "${data.plugin.name}" supprimé`);
+          toast.info(`Plugin "${data.plugin.name}" supprimé.`);
         });
 
         console.log('🎉 Système de plugins initialisé avec succès');
       } catch (error) {
-        console.error('❌ Erreur initialisation plugins:', error);
+        console.error("❌ Erreur initialisation plugins:", error);
+        toast.error("Erreur lors de l'initialisation des plugins.");
       }
     };
 
     initializePlugins();
-  }, []);
+  }, [toast]); // Dépendance à toast pour pouvoir l'utiliser dans les hooks
 
+  // ===== GESTIONNAIRES D'ÉVÉNEMENTS =====
+  // Gère le clic sur le bouton de configuration
   const handleConfigurationClick = () => {
     if (!isAuthenticated) {
       setShowLoginModal(true);
@@ -59,29 +81,34 @@ function App() {
     }
   };
 
+  // Gère la soumission du formulaire de connexion
   const handleLogin = (credentials) => {
-    // Validation simple des identifiants
+    // Logique de connexion simplifiée
     if (credentials.username === 'admin' && credentials.password === 'scalabla2025') {
       setIsAuthenticated(true);
       setShowLoginModal(false);
       setCurrentView('configuration');
+      toast.success('Connexion réussie !');
     } else {
-      alert('Identifiants incorrects');
+      toast.error('Identifiants incorrects.');
     }
   };
 
+  // Ouvre l'assistant de création de plugins
   const handlePluginWizard = (type) => {
     setWizardType(type);
     setShowPluginWizard(true);
   };
 
+  // Gère la fin de la création d'un plugin
   const handlePluginComplete = (plugin) => {
     console.log('🎉 Plugin créé:', plugin);
     setShowPluginWizard(false);
-    // Rafraîchir l'interface de configuration
-    setCurrentView('configuration');
+    setCurrentView('configuration'); // Rafraîchit la vue de configuration
   };
 
+  // ===== RENDU DES VUES =====
+  // Affiche la vue correspondante à l'état `currentView`
   const renderCurrentView = () => {
     switch (currentView) {
       case 'sectors':
@@ -97,13 +124,11 @@ function App() {
         );
       case 'analytics':
         return (
-          <div className="analytics-placeholder" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="analytics-view tab-content active" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
             <PortfolioKPICards />
             <div style={{ marginTop: '30px' }}>
               <AssetAllocationPieChart />
             </div>
-            <h2>📈 Analytics</h2>
-            <p>Module d'analytics en développement...</p>
           </div>
         );
       default:
@@ -111,58 +136,62 @@ function App() {
     }
   };
 
+  // ===== RENDU PRINCIPAL =====
   return (
     <CountryProvider>
       <div className="App">
+        {/* En-tête de l'application */}
         <header className="app-header">
           <div className="header-content">
             <div className="logo-section">
               <div className="logo">🔮</div>
               <div className="title-section">
                 <h1>Oracle Portfolio</h1>
-                <span className="version">v2.6.1</span>
+                <span className="version">v3.0.0</span>
               </div>
             </div>
-            <p className="subtitle">Real-time market data and portfolio analysis</p>
+            <p className="subtitle">{appVersion}</p>
           </div>
         </header>
 
+        {/* Barre de navigation principale */}
         <nav className="main-nav">
           <button 
             onClick={() => setCurrentView('dashboard')}
-            className={`nav-button ${currentView === 'dashboard' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'dashboard' ? 'active' : ''}`}
           >
             📊 Dashboard
           </button>
           <button 
             onClick={() => setCurrentView('sectors')}
-            className={`nav-button ${currentView === 'sectors' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'sectors' ? 'active' : ''}`}
           >
             🏢 Secteurs
           </button>
           <button 
             onClick={() => setCurrentView('essentials')}
-            className={`nav-button ${currentView === 'essentials' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'essentials' ? 'active' : ''}`}
           >
             🚀 Essentiels
           </button>
           <button 
             onClick={() => setCurrentView('analytics')}
-            className={`nav-button ${currentView === 'analytics' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'analytics' ? 'active' : ''}`}
           >
             📈 Analytics
           </button>
           <button 
             onClick={handleConfigurationClick}
-            className={`nav-button ${currentView === 'configuration' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'configuration' ? 'active' : ''}`}
           >
             ⚙️ Configuration
           </button>
-          <button className="nav-button premium">
+          <button className="nav-tab premium">
             Get Full Access
           </button>
         </nav>
 
+        {/* Contenu principal de la vue */}
         <main className="main-content">
           {renderCurrentView()}
         </main>
@@ -186,6 +215,7 @@ function App() {
           </div>
         )}
 
+        {/* Pied de page de l'application */}
         <footer className="app-footer">
           <div className="footer-content">
             <div className="footer-section">
@@ -193,11 +223,12 @@ function App() {
               <span>© 2025 Scalabla Group. Tous droits réservés.</span>
             </div>
             <div className="footer-section">
-              <span>🔌 Plugins actifs</span>
+              <span>🔌 Plugins actifs: {(pluginSystem?.getPlugins('indicator') || []).length + (pluginSystem?.getPlugins('formula') || []).length + (pluginSystem?.getPlugins('regime') || []).length}</span>
             </div>
           </div>
         </footer>
 
+        {/* Styles JSX pour le layout principal */}
         <style jsx>{`
           .App {
             min-height: 100vh;
@@ -261,7 +292,7 @@ function App() {
             border-bottom: 1px solid #2d2d44;
           }
 
-          .nav-button {
+          .nav-tab {
             padding: 12px 24px;
             background: #2d2d44;
             border: none;
@@ -273,17 +304,17 @@ function App() {
             font-size: 14px;
           }
 
-          .nav-button:hover {
+          .nav-tab:hover {
             background: #3d3d54;
             transform: translateY(-2px);
           }
 
-          .nav-button.active {
+          .nav-tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
           }
 
-          .nav-button.premium {
+          .nav-tab.premium {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             animation: pulse 2s infinite;
           }
@@ -300,15 +331,8 @@ function App() {
             margin: 0 auto;
           }
 
-          .analytics-placeholder {
-            padding: 40px;
-            text-align: center;
-            color: #a0a0b0;
-          }
-
-          .analytics-placeholder h2 {
-            color: #667eea;
-            margin-bottom: 20px;
+          .analytics-view {
+            animation: fadeInUp 0.5s ease-out;
           }
 
           .wizard-overlay {
@@ -364,7 +388,7 @@ function App() {
               gap: 8px;
             }
 
-            .nav-button {
+            .nav-tab {
               padding: 10px 16px;
               font-size: 13px;
             }
@@ -378,7 +402,7 @@ function App() {
         `}</style>
       </div>
       
-      {/* Toast Container */}
+      {/* Conteneur pour les notifications toast */}
       <ToastContainer 
         toasts={toast.toasts} 
         onRemove={toast.removeToast} 

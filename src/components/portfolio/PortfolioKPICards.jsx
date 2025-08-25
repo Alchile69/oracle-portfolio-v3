@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import * as TWEEN from '@tweenjs/tween.js';
 import BacktestService from '../../services/backtestService';
 
@@ -65,8 +65,20 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     fetchRealData();
   }, []);
 
-  // Données finales à utiliser
-  const data = realData ? { ...realData, ...portfolioData } : { ...defaultData, ...portfolioData };
+  // Données finales à utiliser - optimisées avec useMemo
+  const data = useMemo(() => {
+    return realData ? { ...realData, ...portfolioData } : { ...defaultData, ...portfolioData };
+  }, [realData, portfolioData]);
+
+  // Calculs optimisés des couleurs pour les KPI Cards
+  const kpiColors = useMemo(() => ({
+    returns: data.returns >= 0 ? '#22c55e' : '#ef4444',
+    volatility: data.volatility < 20 ? '#22c55e' : data.volatility < 30 ? '#f59e0b' : '#ef4444',
+    sharpe: data.sharpe > 1 ? '#22c55e' : data.sharpe > 0.5 ? '#f59e0b' : '#ef4444',
+    drawdown: '#ef4444',
+    winRate: data.winRate >= 60 ? '#22c55e' : data.winRate >= 50 ? '#f59e0b' : '#ef4444',
+    beta: data.beta < 1 ? '#22c55e' : data.beta < 1.2 ? '#f59e0b' : '#ef4444'
+  }), [data]);
 
   // Animation des nombres après chargement des données
   useEffect(() => {
@@ -146,13 +158,11 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
     };
   }, [isLoading, realData, data.returns, data.volatility, data.sharpe, data.drawdown, data.winRate, data.beta]);
 
-  const KPICard = ({ title, value, unit, icon, positive, tooltip }) => {
-    const isPositive = positive ?? value >= 0;
-    const color = isPositive ? '#22c55e' : '#ef4444';
-    
+  const KPICard = ({ title, value, unit, icon, color, tooltip }) => {
     return (
       <div 
-        className="kpi-card"
+        className="portfolio-kpi-card tooltip"
+        data-tooltip={tooltip}
         style={{
           background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
           border: '1px solid rgba(255,255,255,0.1)',
@@ -161,14 +171,6 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
           height: '100%',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
           cursor: 'pointer'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-5px)';
-          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -187,7 +189,7 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
           </div>
         </div>
         
-        <div style={{ 
+        <div className="value" style={{ 
           color: '#fff',
           fontSize: '32px',
           fontWeight: 'bold',
@@ -264,7 +266,7 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
       </div>
       
       {/* Grille 3x2 comme dans la capture d'écran */}
-      <div style={{ 
+      <div className="portfolio-kpi-grid" style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(3, 1fr)', 
         gridTemplateRows: 'repeat(2, 1fr)',
@@ -278,53 +280,50 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
           value={animatedValues.returns}
           unit="%"
           icon={animatedValues.returns >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
-          tooltip="Rendement total depuis le début"
+          color={kpiColors.returns}
+          tooltip="Rendement total depuis le début de la période d'investissement"
         />
-        
         <KPICard
           title="Volatility"
           value={animatedValues.volatility}
           unit="%"
           icon={<ShowChartIcon />}
-          positive={animatedValues.volatility < 20}
-          tooltip="Écart-type annualisé des rendements"
+          color={kpiColors.volatility}
+          tooltip="Écart-type annualisé des rendements - mesure du risque"
         />
-        
         <KPICard
           title="Sharpe Ratio"
           value={animatedValues.sharpe}
           unit=""
           icon={<ShowChartIcon />}
-          positive={animatedValues.sharpe > 1}
-          tooltip="Rendement ajusté au risque"
+          color={kpiColors.sharpe}
+          tooltip="Rendement ajusté au risque - plus élevé = meilleur"
         />
-
-        {/* Deuxième ligne - Nouveaux KPIs */}
+        
+        {/* Deuxième ligne */}
         <KPICard
           title="Max Drawdown"
           value={animatedValues.drawdown}
           unit="%"
           icon={<TrendingDownIcon />}
-          positive={false}
-          tooltip="Perte maximale depuis un pic"
+          color={kpiColors.drawdown}
+          tooltip="Perte maximale depuis un pic - mesure du risque de baisse"
         />
-        
         <KPICard
           title="Win Rate"
           value={animatedValues.winRate}
           unit="%"
-          icon={<TrendingUpIcon />}
-          positive={true}
-          tooltip="Pourcentage de trades gagnants"
+          icon={animatedValues.winRate >= 50 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+          color={kpiColors.winRate}
+          tooltip="Pourcentage de trades gagnants sur la période"
         />
-        
         <KPICard
           title="Beta"
           value={animatedValues.beta}
           unit=""
           icon={<ShowChartIcon />}
-          positive={animatedValues.beta < 1}
-          tooltip="Corrélation avec le marché"
+          color={kpiColors.beta}
+          tooltip="Corrélation avec le marché - 1 = même volatilité que le marché"
         />
       </div>
     </div>

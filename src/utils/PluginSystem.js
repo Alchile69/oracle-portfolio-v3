@@ -582,7 +582,12 @@ class PluginSystem {
 
   // Récupération des plugins par type
   getPlugins(type) {
-    return Array.from(this.plugins[type + 's'].values());
+    const pluginMap = this.plugins[type + 's'];
+    if (!pluginMap) {
+      console.warn(`Type de plugin inconnu: ${type}`);
+      return [];
+    }
+    return Array.from(pluginMap.values());
   }
 
   // Récupération d'un plugin spécifique

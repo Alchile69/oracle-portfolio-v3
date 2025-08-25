@@ -1,0 +1,509 @@
+/* ===== ANIMATIONS & TRANSITIONS WOW V1 ===== */
+/* Animations avancées et micro-interactions pour Oracle Portfolio V3 */
+
+/* ===== VARIABLES CSS POUR ANIMATIONS ===== */
+:root {
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-elastic: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ===== TRANSITIONS ENTRE ONGLETS ===== */
+.tab-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all var(--transition-normal);
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.tab-content.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===== ANIMATIONS KPI CARDS ===== */
+.portfolio-kpi-card {
+  animation: slideInScale 0.6s ease-out forwards;
+  animation-delay: calc(var(--animation-delay, 0) * 0.1s);
+}
+
+@keyframes slideInScale {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.portfolio-kpi-card:nth-child(1) { --animation-delay: 0; }
+.portfolio-kpi-card:nth-child(2) { --animation-delay: 1; }
+.portfolio-kpi-card:nth-child(3) { --animation-delay: 2; }
+.portfolio-kpi-card:nth-child(4) { --animation-delay: 3; }
+.portfolio-kpi-card:nth-child(5) { --animation-delay: 4; }
+.portfolio-kpi-card:nth-child(6) { --animation-delay: 5; }
+
+/* Hover effects pour KPI Cards */
+.portfolio-kpi-card {
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.portfolio-kpi-card:hover::before {
+  left: 100%;
+}
+
+.portfolio-kpi-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-kpi-card:hover .value {
+  transform: scale(1.05);
+  transition: transform var(--transition-bounce);
+}
+
+/* ===== ANIMATIONS PIE CHART ===== */
+.pie-chart-container {
+  animation: fadeInScale 0.8s ease-out;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pie-chart-canvas {
+  transition: transform var(--transition-normal);
+}
+
+.pie-chart-canvas:hover {
+  transform: scale(1.02);
+}
+
+/* ===== ANIMATIONS SLIDERS ===== */
+.allocation-slider {
+  transition: all var(--transition-normal);
+  animation: slideInLeft 0.5s ease-out;
+  animation-delay: calc(var(--slider-delay, 0) * 0.1s);
+  animation-fill-mode: both;
+}
+
+.allocation-slider:nth-child(1) { --slider-delay: 0; }
+.allocation-slider:nth-child(2) { --slider-delay: 2; }
+.allocation-slider:nth-child(3) { --slider-delay: 4; }
+.allocation-slider:nth-child(4) { --slider-delay: 6; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.allocation-slider:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.allocation-slider input[type="range"] {
+  transition: all var(--transition-normal);
+}
+
+.allocation-slider input[type="range"]:hover {
+  transform: scaleY(1.2);
+}
+
+.allocation-slider input[type="range"]:active {
+  transform: scaleY(1.4);
+}
+
+/* ===== ANIMATIONS BOUTONS ===== */
+.preset-button {
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.preset-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.preset-button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+.preset-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+/* Animation spéciale pour Save Portfolio */
+.firebase-controls button {
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.firebase-controls button:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+}
+
+.firebase-controls button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Animation de succès pour Save Portfolio */
+@keyframes saveSuccess {
+  0% { 
+    transform: scale(1); 
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 106, 0.9));
+  }
+  50% { 
+    transform: scale(1.1); 
+    background: linear-gradient(135deg, rgba(0, 255, 136, 1), rgba(0, 204, 106, 1));
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+  }
+  100% { 
+    transform: scale(1); 
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 106, 0.9));
+  }
+}
+
+.firebase-controls button.save-success {
+  animation: saveSuccess 0.6s ease-out;
+}
+
+/* ===== ANIMATIONS NAVIGATION ===== */
+.nav-tab {
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.nav-tab::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  transform: translateX(-50%);
+  transition: width var(--transition-normal);
+}
+
+.nav-tab.active::before {
+  width: 100%;
+}
+
+.nav-tab:hover {
+  transform: translateY(-2px);
+}
+
+.nav-tab:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ===== LOADING STATES ÉLÉGANTS ===== */
+.loading-skeleton {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ===== TOOLTIPS ANIMÉS ===== */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-normal);
+  z-index: 1000;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+/* ===== MICRO-ANIMATIONS ===== */
+.micro-bounce {
+  animation: microBounce 0.3s ease-out;
+}
+
+@keyframes microBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.micro-shake {
+  animation: microShake 0.5s ease-out;
+}
+
+@keyframes microShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.micro-glow {
+  animation: microGlow 2s ease-in-out infinite;
+}
+
+@keyframes microGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+}
+
+/* ===== ANIMATIONS DE CHARGEMENT SPÉCIALES ===== */
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  animation: loadingDots 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loadingDots {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== ANIMATIONS RESPONSIVES ===== */
+@media (max-width: 768px) {
+  .portfolio-kpi-card {
+    animation-duration: 0.4s;
+  }
+  
+  .allocation-slider {
+    animation-duration: 0.3s;
+  }
+  
+  .tab-content {
+    animation-duration: 0.3s;
+  }
+}
+
+/* ===== ACCESSIBILITÉ ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .portfolio-kpi-card:hover,
+  .nav-tab:hover,
+  .preset-button:hover {
+    transform: none !important;
+  }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+.portfolio-kpi-card,
+.pie-chart-container,
+.nav-tab,
+.allocation-slider,
+.preset-button {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ===== ANIMATIONS CONTEXTUELLES ===== */
+.success-animation {
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+  }
+  70% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
+  }
+}
+
+.error-animation {
+  animation: errorShake 0.5s ease-out;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.info-animation {
+  animation: infoBounce 0.6s ease-out;
+}
+
+@keyframes infoBounce {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-5px); }
+  100% { transform: scale(1) translateY(0); }
+}
+

@@ -191,3 +191,82 @@ VITE_BACKTEST_ENDPOINT=/api/backtest
 *Status: All systems operational*  
 *Next milestone: Portfolio KPIs + Pie Chart (Phase 2)*
 
+
+
+
+# WOW V1 - Oracle Portfolio v3.0 - POLISH FINAL
+
+Ce projet est la version finale et améliorée de l'application **Oracle Portfolio v3.0**, avec un focus particulier sur le **polish UI/UX**, le **responsive design**, les **optimisations de performance** et des **tests complets** pour créer une expérience utilisateur professionnelle et fluide.
+
+## ✨ Fonctionnalités Clés
+
+*   **Dashboard Interactif** : Visualisez les données de marché en temps réel avec des indicateurs clés de performance (KPIs) et des graphiques interactifs.
+*   **Analyse de Portefeuille Avancée** : Obtenez des analyses détaillées de votre portefeuille avec des métriques comme le Total Return, la Volatilité, le Sharpe Ratio, le Max Drawdown, le Win Rate et le Beta.
+*   **Allocation d'Actifs Dynamique** : Ajustez l'allocation de votre portefeuille en temps réel avec un Pie Chart interactif et des sliders intuitifs.
+*   **Presets de Portefeuille** : Choisissez parmi des profils d'investissement prédéfinis (Conservative, Balanced, Aggressive) pour une configuration rapide.
+*   **Sauvegarde Cloud** : Sauvegardez vos allocations de portefeuille en toute sécurité avec l'intégration Firebase.
+*   **Responsive Design** : Profitez d'une expérience utilisateur optimale sur tous les appareils (desktop, tablette, mobile).
+*   **UI/UX Moderne** : Interface élégante avec des effets de glassmorphism, des animations fluides et des micro-interactions.
+*   **Performances Optimisées** : Application ultra-réactive grâce au lazy loading, à la mémoïsation (useMemo) et au debounce des interactions.
+
+## 🚀 Technologies Utilisées
+
+*   **Frontend** : React, Vite, Chart.js, Tween.js
+*   **Styling** : CSS Modules, Glassmorphism, Animations CSS avancées
+*   **Backend** : Firebase (Firestore, Auth)
+*   **Déploiement** : Vercel (Frontend), Railway (Backend)
+
+## 🛠️ Installation et Lancement
+
+1.  **Cloner le repository** :
+    ```bash
+    git clone <URL_DU_REPO>
+    cd oracle-portfolio-v3
+    ```
+
+2.  **Installer les dépendances** :
+    ```bash
+    npm install
+    ```
+
+3.  **Configurer les variables d'environnement** :
+    Créez un fichier `.env.local` à la racine du projet et ajoutez vos clés Firebase :
+    ```
+    VITE_FIREBASE_API_KEY=your_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    ```
+
+4.  **Lancer le serveur de développement** :
+    ```bash
+    npm run dev
+    ```
+
+L'application sera disponible sur `http://localhost:5173`.
+
+## 📝 Guide d'Utilisation
+
+1.  **Dashboard** : Vue d'ensemble des indicateurs de marché et de votre portefeuille.
+2.  **Analytics** : Analyse détaillée des performances de votre portefeuille avec les KPI Cards et le Pie Chart interactif.
+3.  **Configuration** : Personnalisez les paramètres de l'application et gérez votre compte.
+4.  **Sauvegarde** : Cliquez sur "Save Portfolio" pour sauvegarder vos allocations dans Firebase.
+5.  **Presets** : Utilisez les boutons "Conservative", "Balanced", "Aggressive" pour charger des allocations prédéfinies.
+
+## ✅ Tests
+
+Le projet a été testé sur les navigateurs suivants :
+
+*   Chrome
+*   Firefox
+*   Safari
+
+Des tests ont été effectués pour vérifier la réactivité, les performances et la gestion des erreurs.
+
+## 🌟 Auteur
+
+**Manus** - Votre agent IA pour le développement de projets complexes.
+
+
