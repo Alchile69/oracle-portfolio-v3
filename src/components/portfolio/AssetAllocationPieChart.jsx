@@ -206,16 +206,28 @@ const AssetAllocationPieChart = () => {
         // Toast de succès
         toast.success('Portfolio sauvegardé avec succès !', 2000);
         
-        // Animation visuelle de confirmation
-        const button = document.querySelector('[data-save-button]');
-        if (button) {
-          button.style.transform = 'scale(1.05)';
-          button.style.backgroundColor = '#00ff88';
-          setTimeout(() => {
-            button.style.transform = 'scale(1)';
-            button.style.backgroundColor = '';
-          }, 300);
-        }
+        // Animation visuelle de confirmation - CORRIGÉE pour LoadingButton
+        setTimeout(() => {
+          const button = document.querySelector('[data-save-button="true"]');
+          if (button) {
+            // Animation plus visible avec LoadingButton
+            button.style.transform = 'scale(1.1)';
+            button.style.boxShadow = '0 0 20px #00ff88';
+            button.style.backgroundColor = '#00ff88';
+            button.style.borderColor = '#00ff88';
+            
+            // Ajouter un effet de pulsation
+            button.style.animation = 'pulse 0.6s ease-in-out';
+            
+            setTimeout(() => {
+              button.style.transform = 'scale(1)';
+              button.style.boxShadow = '';
+              button.style.backgroundColor = '';
+              button.style.borderColor = '';
+              button.style.animation = '';
+            }, 600);
+          }
+        }, 100); // Délai pour que le spinner disparaisse
         
         console.log('💾 Allocations sauvegardées avec succès');
       } else {
