@@ -8,9 +8,15 @@ import SectorsModule from './components/sectors/SectorsModule';
 import EssentialsModule from './components/essentials/EssentialsModule';
 import PortfolioKPICards from './components/portfolio/PortfolioKPICards';
 import AssetAllocationPieChart from './components/portfolio/AssetAllocationPieChart';
+import ScreeningTable from './components/screening/ScreeningTable';
+import MobileNavigation from './components/ui/MobileNavigation';
+import PageTransition from './components/ui/PageTransition';
 import { ToastContainer, useToast } from './components/ui/ToastNotification';
 import pluginSystem from './utils/PluginSystem';
 import './App.css';
+import './styles/responsive.css';
+import './styles/glassmorphism.css';
+import './styles/analytics.css';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -97,17 +103,65 @@ function App() {
         );
       case 'analytics':
         return (
-          <div className="analytics-placeholder" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-            <PortfolioKPICards />
-            <div style={{ marginTop: '30px' }}>
-              <AssetAllocationPieChart />
+          <div className="analytics-container">
+            <div className="analytics-header">
+              <h2 className="analytics-title">
+                <span className="analytics-icon">📈</span>
+                Portfolio Analytics
+              </h2>
+              <p className="analytics-subtitle">
+                Analyse en temps réel de votre portefeuille d'investissement
+              </p>
             </div>
-            <h2>📈 Analytics</h2>
-            <p>Module d'analytics en développement...</p>
+            
+            <div className="analytics-content">
+              <div className="analytics-section kpi-section">
+                <PortfolioKPICards />
+              </div>
+              
+              <div className="analytics-section allocation-section">
+                <AssetAllocationPieChart />
+              </div>
+            </div>
           </div>
         );
       default:
-        return <Dashboard />;
+        // Dashboard unifié WOW V1 MVP
+        return (
+          <div className="dashboard-unified">
+            <div className="dashboard-header">
+              <h2 className="dashboard-title">
+                <span className="dashboard-icon">🚀</span>
+                WOW V1 - Portfolio Management Dashboard
+              </h2>
+              <p className="dashboard-subtitle">
+                Vue d'ensemble complète de votre portefeuille d'investissement
+              </p>
+            </div>
+            
+            <div className="dashboard-content">
+              {/* Section KPI Cards */}
+              <div className="dashboard-section kpi-section">
+                <PortfolioKPICards />
+              </div>
+              
+              {/* Section Asset Allocation et Screening */}
+              <div className="dashboard-grid">
+                <div className="dashboard-section allocation-section">
+                  <AssetAllocationPieChart />
+                </div>
+                
+                <div className="dashboard-section screening-section">
+                  <ScreeningTable 
+                    compact={true} 
+                    maxRows={5}
+                    title="Top 5 Assets Screening"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
     }
   };
 
@@ -127,44 +181,17 @@ function App() {
           </div>
         </header>
 
-        <nav className="main-nav">
-          <button 
-            onClick={() => setCurrentView('dashboard')}
-            className={`nav-button ${currentView === 'dashboard' ? 'active' : ''}`}
-          >
-            📊 Dashboard
-          </button>
-          <button 
-            onClick={() => setCurrentView('sectors')}
-            className={`nav-button ${currentView === 'sectors' ? 'active' : ''}`}
-          >
-            🏢 Secteurs
-          </button>
-          <button 
-            onClick={() => setCurrentView('essentials')}
-            className={`nav-button ${currentView === 'essentials' ? 'active' : ''}`}
-          >
-            🚀 Essentiels
-          </button>
-          <button 
-            onClick={() => setCurrentView('analytics')}
-            className={`nav-button ${currentView === 'analytics' ? 'active' : ''}`}
-          >
-            📈 Analytics
-          </button>
-          <button 
-            onClick={handleConfigurationClick}
-            className={`nav-button ${currentView === 'configuration' ? 'active' : ''}`}
-          >
-            ⚙️ Configuration
-          </button>
-          <button className="nav-button premium">
-            Get Full Access
-          </button>
-        </nav>
+        <MobileNavigation
+          currentView={currentView}
+          onViewChange={setCurrentView}
+          isAuthenticated={isAuthenticated}
+          onConfigurationClick={handleConfigurationClick}
+        />
 
         <main className="main-content">
-          {renderCurrentView()}
+          <PageTransition currentView={currentView}>
+            {renderCurrentView()}
+          </PageTransition>
         </main>
 
         {/* Modal de connexion */}

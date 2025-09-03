@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as TWEEN from '@tweenjs/tween.js';
 import BacktestService from '../../services/backtestService';
+import EnhancedKPICard from './EnhancedKPICard';
 
 const PortfolioKPICards = ({ portfolioData = {} }) => {
   const [animatedValues, setAnimatedValues] = useState({
@@ -273,58 +274,73 @@ const PortfolioKPICards = ({ portfolioData = {} }) => {
         margin: '0 auto'
       }}>
         {/* Première ligne */}
-        <KPICard
+        <EnhancedKPICard
           title="Total Return"
           value={animatedValues.returns}
           unit="%"
           icon={animatedValues.returns >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+          trend={animatedValues.returns >= 0 ? 'up' : 'down'}
           tooltip="Rendement total depuis le début"
+          isLoading={isLoading}
+          animationDelay={0}
         />
         
-        <KPICard
+        <EnhancedKPICard
           title="Volatility"
           value={animatedValues.volatility}
           unit="%"
           icon={<ShowChartIcon />}
-          positive={animatedValues.volatility < 20}
+          color={animatedValues.volatility < 20 ? '#00ff88' : '#f59e0b'}
           tooltip="Écart-type annualisé des rendements"
+          isLoading={isLoading}
+          animationDelay={100}
         />
         
-        <KPICard
+        <EnhancedKPICard
           title="Sharpe Ratio"
           value={animatedValues.sharpe}
           unit=""
           icon={<ShowChartIcon />}
-          positive={animatedValues.sharpe > 1}
+          trend={animatedValues.sharpe > 1 ? 'up' : 'down'}
           tooltip="Rendement ajusté au risque"
+          isLoading={isLoading}
+          animationDelay={200}
         />
 
         {/* Deuxième ligne - Nouveaux KPIs */}
-        <KPICard
+        <EnhancedKPICard
           title="Max Drawdown"
           value={animatedValues.drawdown}
           unit="%"
           icon={<TrendingDownIcon />}
-          positive={false}
+          trend="down"
+          color="#ef4444"
           tooltip="Perte maximale depuis un pic"
+          isLoading={isLoading}
+          animationDelay={300}
         />
         
-        <KPICard
+        <EnhancedKPICard
           title="Win Rate"
           value={animatedValues.winRate}
           unit="%"
           icon={<TrendingUpIcon />}
-          positive={true}
+          trend="up"
+          color="#00ff88"
           tooltip="Pourcentage de trades gagnants"
+          isLoading={isLoading}
+          animationDelay={400}
         />
         
-        <KPICard
+        <EnhancedKPICard
           title="Beta"
           value={animatedValues.beta}
           unit=""
           icon={<ShowChartIcon />}
-          positive={animatedValues.beta < 1}
+          color={animatedValues.beta < 1 ? '#00ff88' : '#f59e0b'}
           tooltip="Corrélation avec le marché"
+          isLoading={isLoading}
+          animationDelay={500}
         />
       </div>
     </div>

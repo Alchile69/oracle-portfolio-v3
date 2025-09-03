@@ -1,0 +1,252 @@
+/* ===== GLASSMORPHISM & MODERN DESIGN WOW V1 ===== */
+
+/* Glassmorphism Base */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card-strong {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient Backgrounds */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.gradient-info {
+  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* Animated Gradients */
+.gradient-animated {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #00ff88, #4f46e5);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Micro Animations */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* Pulse Animation */
+.pulse-success {
+  animation: pulseSuccess 2s infinite;
+}
+
+@keyframes pulseSuccess {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+}
+
+.pulse-warning {
+  animation: pulseWarning 2s infinite;
+}
+
+@keyframes pulseWarning {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+/* Loading Shimmer */
+.shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Floating Animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Neon Glow Effects */
+.neon-green {
+  color: #00ff88;
+  text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 15px #00ff88;
+}
+
+.neon-blue {
+  color: #4f46e5;
+  text-shadow: 0 0 5px #4f46e5, 0 0 10px #4f46e5, 0 0 15px #4f46e5;
+}
+
+.neon-orange {
+  color: #f59e0b;
+  text-shadow: 0 0 5px #f59e0b, 0 0 10px #f59e0b, 0 0 15px #f59e0b;
+}
+
+/* Modern Buttons */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-glass:active {
+  transform: translateY(0);
+}
+
+/* Modern Cards */
+.card-modern {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Progress Bars */
+.progress-modern {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #00cc6a);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Tooltip Modern */
+.tooltip-modern {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip-modern::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.tooltip-modern:hover::after {
+  opacity: 1;
+}
+
+/* Scrollbar Modern */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
