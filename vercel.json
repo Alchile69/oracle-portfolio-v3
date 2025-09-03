@@ -1,0 +1,32 @@
+{
+  "name": "oracle-portfolio-v3-wow-v1",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "https://oracle-backend-wow-v1-production.up.railway.app"
+  },
+  "functions": {
+    "src/index.js": {
+      "includeFiles": "build/**"
+    }
+  }
+}
+
