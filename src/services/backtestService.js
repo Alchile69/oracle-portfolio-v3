@@ -73,3 +73,4 @@ class BacktestService {
 const backtestService = new BacktestService();
 export default backtestService;
 
+// Force Vercel redeploy Thu Sep  4 12:54:23 EDT 2025
