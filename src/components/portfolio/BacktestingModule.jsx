@@ -49,7 +49,7 @@ const BacktestingModule = ({ data, user }) => {
     
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        const statusResponse = await fetch(`http://localhost:8000/api/backtest/status/${requestId}`);
+        const statusResponse = await fetch(`https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/status/${requestId}`);
         
         if (!statusResponse.ok) {
           throw new Error(`Erreur status API: ${statusResponse.status}`);
@@ -59,7 +59,7 @@ const BacktestingModule = ({ data, user }) => {
         
         if (statusData.status === 'completed') {
           // Récupérer les résultats complets
-          const resultsResponse = await fetch(`http://localhost:8000/api/backtest/results/${requestId}`);
+          const resultsResponse = await fetch(`https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/results/${requestId}`);
           
           if (!resultsResponse.ok) {
             throw new Error(`Erreur results API: ${resultsResponse.status}`);
@@ -115,7 +115,7 @@ const BacktestingModule = ({ data, user }) => {
       };
 
       // Appel API pour lancer le backtesting
-      const response = await fetch('http://localhost:8000/api/backtest/run', {
+      const response = await fetch('https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ const BacktestingModule = ({ data, user }) => {
     try {
       const symbols = 'AAPL,GOOGL,MSFT,TSLA';
       const response = await fetch(
-        `http://localhost:8000/api/backtest/validate?symbols=${symbols}&start_date=${backtestConfig.startDate}&end_date=${backtestConfig.endDate}`
+        `https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/validate?symbols=${symbols}&start_date=${backtestConfig.startDate}&end_date=${backtestConfig.endDate}`
       );
       
       if (!response.ok) {

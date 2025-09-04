@@ -8,8 +8,17 @@ import ScreeningTable from './portfolio/ScreeningTable';
 import CountryHeatmap from './portfolio/CountryHeatmap';
 import BacktestingModule from './portfolio/BacktestingModule';
 
-const Analytics = ({ user, isAuthenticated }) => {
-  const [activeSection, setActiveSection] = useState('overview');
+const Analytics = ({ user, isAuthenticated, defaultSection = 'overview' }) => {
+  // Mapping des sections Oracle V3 vers Analytics WOW V1
+  const sectionMapping = {
+    'portfolio': 'overview',
+    'markets': 'allocation', 
+    'screening': 'screening'
+  };
+
+  // Initialiser activeSection avec le mapping
+  const initialSection = sectionMapping[defaultSection] || defaultSection;
+  const [activeSection, setActiveSection] = useState(initialSection);
   const [loading, setLoading] = useState(false);
   const [portfolioData, setPortfolioData] = useState(null);
 
@@ -17,15 +26,15 @@ const Analytics = ({ user, isAuthenticated }) => {
   const analyticsSections = [
     {
       id: 'overview',
-      label: 'Vue d\'ensemble',
-      icon: '📈',
+      label: 'Portfolio',
+      icon: '💼',
       description: 'KPIs et métriques principales'
     },
     {
       id: 'allocation',
-      label: 'Allocation',
-      icon: '🥧',
-      description: 'Répartition des actifs'
+      label: 'Markets',
+      icon: '📊',
+      description: 'Répartition des actifs et marchés'
     },
     {
       id: 'screening',
@@ -81,6 +90,8 @@ const Analytics = ({ user, isAuthenticated }) => {
 
   // Rendu du contenu selon la section active
   const renderSectionContent = () => {
+    console.log('🎯 Rendu section:', activeSection);
+    
     if (loading) {
       return (
         <div className="loading-section">
@@ -201,7 +212,10 @@ const Analytics = ({ user, isAuthenticated }) => {
             <button
               key={section.id}
               className={`section-btn ${activeSection === section.id ? 'active' : ''}`}
-              onClick={() => setActiveSection(section.id)}
+              onClick={() => {
+                console.log('🔄 Changement section:', section.id, 'depuis:', activeSection);
+                setActiveSection(section.id);
+              }}
               title={section.description}
             >
               <span className="section-icon">{section.icon}</span>

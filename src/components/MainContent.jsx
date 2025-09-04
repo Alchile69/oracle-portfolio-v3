@@ -3,14 +3,8 @@ import './MainContent.css';
 
 // Import des composants Oracle V3 + WOW V1
 import Dashboard from './Dashboard';
-import Analytics from './Analytics'; // WOW V1 intégré ici
+import Analytics from './Analytics'; // WOW V1 intégré ici avec Portfolio/Markets/Screening
 import Configuration from './Configuration';
-import GetFullAccess from './GetFullAccess';
-
-// Composants Oracle V3 originaux à créer
-import Portfolio from './Portfolio';
-import Markets from './Markets';
-import Screening from './Screening';
 
 const MainContent = ({ activeSection, user, isAuthenticated, onNavigate }) => {
   const renderContent = () => {
@@ -24,11 +18,28 @@ const MainContent = ({ activeSection, user, isAuthenticated, onNavigate }) => {
         );
         
       case 'portfolio':
+      case 'markets':
+      case 'screening':
+        // Rediriger vers Analytics qui contient ces fonctionnalités
         return (
-          <Portfolio 
-            user={user}
-            isAuthenticated={isAuthenticated}
-          />
+          <div className="analytics-container">
+            <div className="section-header">
+              <h1 className="section-title">
+                <span className="section-icon">📈</span>
+                Analytics - Oracle V3 + WOW V1
+                <span className="wow-badge">INTÉGRÉ</span>
+              </h1>
+              <p className="section-description">
+                Portfolio, Markets et Screening sont maintenant intégrés dans Analytics avec WOW V1
+              </p>
+            </div>
+            
+            <Analytics 
+              user={user}
+              isAuthenticated={isAuthenticated}
+              defaultSection={activeSection} // Passer la section demandée
+            />
+          </div>
         );
         
       case 'analytics':
@@ -50,22 +61,6 @@ const MainContent = ({ activeSection, user, isAuthenticated, onNavigate }) => {
               isAuthenticated={isAuthenticated}
             />
           </div>
-        );
-        
-      case 'markets':
-        return (
-          <Markets 
-            user={user}
-            isAuthenticated={isAuthenticated}
-          />
-        );
-        
-      case 'screening':
-        return (
-          <Screening 
-            user={user}
-            isAuthenticated={isAuthenticated}
-          />
         );
         
       case 'configuration':

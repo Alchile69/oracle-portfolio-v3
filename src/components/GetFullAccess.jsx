@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './GetFullAccess.css';
 
-const GetFullAccess = ({ user }) => {
-  const navigate = useNavigate();
+const GetFullAccess = ({ user, onNavigate }) => {
   const [selectedPlan, setSelectedPlan] = useState('pro');
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +91,7 @@ const GetFullAccess = ({ user }) => {
 
   // Navigation vers Analytics pour voir les fonctionnalités
   const goToAnalytics = () => {
-    navigate('/analytics');
+    onNavigate('analytics');
   };
 
   return (

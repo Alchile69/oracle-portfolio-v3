@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = ({ user, onNavigate }) => {
-  const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,13 +42,11 @@ const Dashboard = ({ user, onNavigate }) => {
   // Navigation vers Analytics
   const goToAnalytics = () => {
     onNavigate('analytics');
-    navigate('/analytics');
   };
 
   // Navigation vers Configuration
   const goToConfiguration = () => {
     onNavigate('configuration');
-    navigate('/configuration');
   };
 
   if (loading) {
@@ -143,7 +139,7 @@ const Dashboard = ({ user, onNavigate }) => {
             </div>
           </button>
 
-          <button className="action-card" onClick={() => navigate('/get-full-access')}>
+          <button className="action-card" onClick={() => onNavigate('get-full-access')}>
             <div className="action-icon">🔓</div>
             <div className="action-content">
               <h3>Get Full Access</h3>
