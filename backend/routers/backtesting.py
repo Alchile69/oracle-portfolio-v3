@@ -12,9 +12,9 @@ import math
 import json
 
 # Firebase imports for persistence
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_config import db
 
+# Import models and services
 from models.backtest import (
     BacktestRequest, BacktestResults, BacktestError, BacktestStatus,
     StrategyType, RebalanceFrequency, AssetData
@@ -23,29 +23,12 @@ from services.backtesting_service import backtesting_service
 
 logger = logging.getLogger(__name__)
 
-# Initialize Firebase if not already done
-try:
-    firebase_admin.get_app()
-except ValueError:
-    # For development - use default credentials
-    # In production, use proper service account key
-    try:
-        cred = credentials.ApplicationDefault()
-        firebase_admin.initialize_app(cred)
-        logger.info("Firebase initialized with application default credentials")
-    except Exception as e:
-        logger.warning(f"Firebase initialization failed: {e}. Using in-memory storage.")
-        firebase_admin.initialize_app()
-
-# Get Firestore client
-try:
-    db = firestore.client()
-    FIRESTORE_AVAILABLE = True
-    logger.info("Firestore client initialized successfully")
-except Exception as e:
-    logger.warning(f"Firestore client initialization failed: {e}. Using in-memory storage.")
-    db = None
-    FIRESTORE_AVAILABLE = False
+# Check if Firestore is available
+FIRESTORE_AVAILABLE = db is not None
+if FIRESTORE_AVAILABLE:
+    logger.info("✅ Firestore client available from Railway config")
+else:
+    logger.warning("⚠️ Firestore not available, using in-memory storage")
 
 router = APIRouter(prefix="/api/backtest", tags=["backtesting"])
 

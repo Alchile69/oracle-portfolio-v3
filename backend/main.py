@@ -12,6 +12,9 @@ import os
 # Import routers
 from routers import backtesting
 
+# Import Firebase configuration
+from firebase_config import db
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
