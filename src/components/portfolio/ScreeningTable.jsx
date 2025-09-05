@@ -77,7 +77,21 @@ const ScreeningTable = ({ data, user }) => {
       'MSFT': 'Technology',
       'TSLA': 'Automotive',
       'AMZN': 'E-commerce',
-      'NVDA': 'Technology'
+      'NVDA': 'Technology',
+      'META': 'Technology',
+      'NFLX': 'Entertainment',
+      'AMD': 'Technology',
+      'CRM': 'Technology',
+      'ADBE': 'Technology',
+      'PYPL': 'Financial Services',
+      'INTC': 'Technology',
+      'CSCO': 'Technology',
+      'ORCL': 'Technology',
+      'IBM': 'Technology',
+      'QCOM': 'Technology',
+      'UBER': 'Transportation',
+      'SPOT': 'Entertainment',
+      'ZOOM': 'Technology'
     };
     return sectors[symbol] || 'Other';
   };
@@ -241,14 +255,17 @@ const ScreeningTable = ({ data, user }) => {
           
           <div className="filter-group">
             <label>Secteur</label>
-            <select
-              value={filters.sector}
-              onChange={(e) => updateFilter('sector', e.target.value)}
+            <select 
+              value={filters.sector} 
+              onChange={(e) => setFilters({...filters, sector: e.target.value})}
             >
               <option value="all">Tous</option>
               <option value="Technology">Technology</option>
               <option value="Automotive">Automotive</option>
               <option value="E-commerce">E-commerce</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Financial Services">Financial Services</option>
+              <option value="Transportation">Transportation</option>
               <option value="Other">Other</option>
             </select>
           </div>
