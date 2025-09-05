@@ -68,6 +68,12 @@ class FirebaseService {
   // Récupérer les données du portefeuille
   async getPortfolioData(userId) {
     try {
+      // Vérification userId
+      if (!userId) {
+        console.log('❌ UserId manquant pour getPortfolioData');
+        return this.getDemoData();
+      }
+
       const docRef = doc(this.db, 'portfolios', userId);
       const docSnap = await getDoc(docRef);
       
@@ -75,18 +81,24 @@ class FirebaseService {
         console.log('✅ Données du portefeuille récupérées');
         return docSnap.data();
       } else {
-        console.log('ℹ️ Aucune donnée de portefeuille trouvée');
-        return null;
+        console.log('ℹ️ Aucune donnée de portefeuille trouvée, utilisation des données demo');
+        return this.getDemoData();
       }
     } catch (error) {
       console.error('❌ Erreur récupération portefeuille:', error);
-      throw error;
+      return this.getDemoData();
     }
   }
 
   // Sauvegarder les résultats de backtesting
   async saveBacktestResults(userId, backtestData) {
     try {
+      // Vérification userId
+      if (!userId) {
+        console.log('❌ UserId manquant pour saveBacktestResults');
+        return null;
+      }
+
       const backtestsRef = collection(this.db, 'backtests');
       const docRef = await addDoc(backtestsRef, {
         userId: userId,
@@ -99,13 +111,19 @@ class FirebaseService {
       return docRef.id;
     } catch (error) {
       console.error('❌ Erreur sauvegarde backtesting:', error);
-      throw error;
+      return null;
     }
   }
 
   // Récupérer l'historique des backtests
   async getBacktestHistory(userId, limitCount = 10) {
     try {
+      // Vérification userId
+      if (!userId) {
+        console.log('❌ UserId manquant pour getBacktestHistory');
+        return [];
+      }
+
       const backtestsRef = collection(this.db, 'backtests');
       const q = query(
         backtestsRef,
@@ -129,7 +147,7 @@ class FirebaseService {
       return backtests;
     } catch (error) {
       console.error('❌ Erreur récupération historique backtests:', error);
-      throw error;
+      return [];
     }
   }
 

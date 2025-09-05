@@ -19,13 +19,20 @@ function App() {
         console.log('🚀 Oracle MVP - Initialisation...');
         
         // Authentification Firebase
-        const authUser = await firebaseService.signInAnonymously();
-        setUser(authUser);
-        setIsAuthenticated(true);
+        const authResult = await firebaseService.signInAnonymously();
         
-        console.log('✅ Authentification réussie');
+        // Vérification que l'authentification a réussi
+        if (authResult && authResult.user) {
+          setUser(authResult.user);
+          setIsAuthenticated(true);
+          console.log('✅ Authentification réussie:', authResult.user.uid);
+        } else {
+          console.log('❌ Authentification échouée');
+          setIsAuthenticated(false);
+        }
       } catch (error) {
         console.error('❌ Erreur authentification:', error);
+        setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
