@@ -1,107 +1,208 @@
-/* Oracle Portfolio V3 - Architecture Sidebar + MainContent */
-.App {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+/* Reset brutal mais efficace */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f0f23;
   color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Inter, sans-serif;
+  line-height: 1.6;
 }
 
-/* Oracle V3 Layout */
-.oracle-v3-layout {
-  display: flex;
+.app {
   min-height: 100vh;
+  background: #0f0f23;
 }
 
-/* Sidebar fixe à gauche */
-.oracle-v3-layout .sidebar {
-  width: 280px;
-  min-width: 280px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  z-index: 1000;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* MainContent avec marge pour sidebar */
-.oracle-v3-layout .main-content {
-  flex: 1;
-  margin-left: 280px;
-  min-height: 100vh;
-  padding: 2rem;
+.card {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #2a2a3e;
 }
 
-/* Loading Screen */
-.loading-container {
+/* Navigation principale */
+.main-nav {
+  background: #1a1a2e;
+  padding: 20px 0;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 0 20px;
+}
+
+.nav-brand {
+  font-size: 24px;
+  font-weight: bold;
   color: #ffffff;
 }
 
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top: 3px solid #4ECDC4;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+.nav-links {
+  display: flex;
+  gap: 40px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  transition: background 0.3s;
+  font-weight: 500;
 }
 
-/* Responsive Design */
+.nav-link:hover,
+.nav-link.active {
+  background: #2a2a3e;
+  color: #ffffff;
+}
+
+/* Contenu principal */
+.main-content {
+  padding: 40px 0;
+}
+
+/* Métriques Dashboard */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.metric-card {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #2a2a3e;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #4ade80;
+  margin-bottom: 8px;
+}
+
+.metric-label {
+  color: #a1a1aa;
+  font-size: 14px;
+}
+
+/* Analytics modules */
+.analytics-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.module-card {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #2a2a3e;
+}
+
+.module-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
+
+/* Boutons */
+.btn {
+  background: #4ade80;
+  color: #000000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #22c55e;
+}
+
+.btn-secondary {
+  background: #2a2a3e;
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background: #3a3a4e;
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.table th {
+  background: #2a2a3e;
+  font-weight: 600;
+}
+
+/* Inputs */
+.input {
+  background: #2a2a3e;
+  border: 1px solid #3a3a4e;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4ade80;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .oracle-v3-layout .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
+  .nav-links {
+    gap: 20px;
   }
   
-  .oracle-v3-layout .main-content {
-    margin-left: 0;
-    padding: 1rem;
+  .nav-link {
+    padding: 8px 16px;
+    font-size: 14px;
   }
-}
-
-/* Glassmorphism Effects */
-.glass-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-/* Utility Classes */
-.text-gradient {
-  background: linear-gradient(45deg, #4ECDC4, #44A08D);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.btn-primary {
-  background: linear-gradient(45deg, #4ECDC4, #44A08D);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analytics-modules {
+    grid-template-columns: 1fr;
+  }
 }
 
