@@ -250,6 +250,11 @@ class FirebaseService {
       lastUpdated: new Date()
     };
   }
+
+  // Méthode pour sauvegarder les résultats de backtesting (alias)
+  async saveBacktestResult(userId, backtestData) {
+    return await this.saveBacktestResults(userId, backtestData);
+  }
 }
 
 // Instance singleton
