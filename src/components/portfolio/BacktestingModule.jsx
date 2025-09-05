@@ -332,27 +332,27 @@ const BacktestingModule = ({ data, user }) => {
             <div className="results-metrics">
               <div className="metric-card">
                 <div className="metric-label">Rendement Total</div>
-                <div className="metric-value positive">{backtestResults.performance.totalReturn}%</div>
+                <div className="metric-value positive">{backtestResults?.performance?.totalReturn || 0}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Rendement Annualisé</div>
-                <div className="metric-value positive">{backtestResults.performance.annualizedReturn}%</div>
+                <div className="metric-value positive">{backtestResults?.performance?.annualizedReturn || 0}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Volatilité</div>
-                <div className="metric-value">{backtestResults.performance.volatility}%</div>
+                <div className="metric-value">{backtestResults?.performance?.volatility || 0}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Sharpe Ratio</div>
-                <div className="metric-value">{backtestResults.performance.sharpeRatio}</div>
+                <div className="metric-value">{backtestResults?.performance?.sharpeRatio || 0}</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Max Drawdown</div>
-                <div className="metric-value negative">{backtestResults.performance.maxDrawdown}%</div>
+                <div className="metric-value negative">{backtestResults?.performance?.maxDrawdown || 0}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Win Rate</div>
-                <div className="metric-value">{backtestResults.performance.winRate}%</div>
+                <div className="metric-value">{backtestResults?.performance?.winRate || 0}%</div>
               </div>
             </div>
             

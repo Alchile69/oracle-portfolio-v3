@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
-// Configuration Firebase (à remplacer par vos vraies clés)
+// Configuration Firebase
 const firebaseConfig = {
-  apiKey: "demo-api-key",
-  authDomain: "oracle-portfolio-v3.firebaseapp.com",
-  projectId: "oracle-portfolio-v3",
-  storageBucket: "oracle-portfolio-v3.appspot.com",
+  apiKey: "AIzaSyDa1o_qmqPCh9v0BDtCvZOCqM2q6QBPcvs",
+  authDomain: "oracle-portfolio-wow-v1.firebaseapp.com",
+  projectId: "oracle-portfolio-wow-v1",
+  storageBucket: "oracle-portfolio-wow-v1.appspot.com",
   messagingSenderId: "123456789",
   appId: "1:123456789:web:abcdef123456"
 };
