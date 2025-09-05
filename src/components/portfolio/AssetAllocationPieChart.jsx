@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { firebaseService } from '../../services/firebaseService';
 import './AssetAllocationPieChart.css';
 
 const AssetAllocationPieChart = ({ data, user }) => {
-  const [chartData, setChartData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedSegment, setSelectedSegment] = useState(null);
-  const [showLegend, setShowLegend] = useState(true);
   const canvasRef = useRef(null);
+  const [selectedSegment, setSelectedSegment] = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showLegend, setShowLegend] = useState(true);
 
-  // Couleurs pour les segments
-  const colors = [
+  // Couleurs pour les segments - useMemo pour éviter la recréation
+  const colors = useMemo(() => [
     '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD',
     '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#F8C471', '#82E0AA'
-  ];
+  ], []);
 
   // Chargement des données
   useEffect(() => {
@@ -117,7 +117,7 @@ const AssetAllocationPieChart = ({ data, user }) => {
     const num = parseInt(color.replace("#", ""), 16);
     const amt = Math.round(2.55 * percent);
     const R = (num >> 16) + amt;
-    const G = (num >> 8 & 0x00FF) + amt;
+    const G = ((num >> 8) & 0x00FF) + amt;
     const B = (num & 0x0000FF) + amt;
     return "#" + (0x1000000 + (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
       (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
