@@ -182,7 +182,6 @@ const BacktestingModule = ({ data, user }) => {
     }
   };
   // Fonction pour valider la configuration avant le backtesting
-  const validateConfig = async () => {
     try {
       const symbols = 'AAPL,GOOGL,MSFT,TSLA';
       const response = await fetch(
