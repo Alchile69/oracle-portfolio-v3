@@ -181,8 +181,6 @@ const BacktestingModule = ({ data, user }) => {
       setLoading(false);
     }
   };
-
-
   // Mise à jour de la configuration
   const updateConfig = (key, value) => {
     setBacktestConfig(prev => ({
