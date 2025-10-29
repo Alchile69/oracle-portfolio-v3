@@ -181,25 +181,6 @@ const BacktestingModule = ({ data, user }) => {
       setLoading(false);
     }
   };
-  // Fonction pour valider la configuration avant le backtesting
-    try {
-      const symbols = 'AAPL,GOOGL,MSFT,TSLA';
-      const response = await fetch(
-        `https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/validate?symbols=${symbols}&start_date=${backtestConfig.startDate}&end_date=${backtestConfig.endDate}`
-      );
-      
-      if (!response.ok) {
-        throw new Error('Erreur de validation');
-      }
-      
-      const validation = await response.json();
-      return validation;
-    } catch (error) {
-      console.error('Erreur de validation:', error);
-      return { valid: false, errors: ['Erreur de validation'] };
-    }
-  };
-
   // Mise à jour de la configuration
   const updateConfig = (key, value) => {
     setBacktestConfig(prev => ({
