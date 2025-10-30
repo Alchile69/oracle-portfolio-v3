@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { firebaseService } from '../../services/firebaseService';
 import './BacktestingModule.css';
 
+// URL du backend depuis variable d'environnement
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
+
 const BacktestingModule = ({ data, user }) => {
   const [activeTab, setActiveTab] = useState('configuration');
   const [backtestConfig, setBacktestConfig] = useState({
@@ -49,7 +52,7 @@ const BacktestingModule = ({ data, user }) => {
     
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        const statusResponse = await fetch(`https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/status/${requestId}`);
+        const statusResponse = await fetch(`${BACKEND_URL}/api/backtest/status/${requestId}`);
         
         if (!statusResponse.ok) {
           throw new Error(`Erreur status API: ${statusResponse.status}`);
@@ -59,7 +62,7 @@ const BacktestingModule = ({ data, user }) => {
         
         if (statusData.status === 'completed') {
           // Récupérer les résultats complets
-          const resultsResponse = await fetch(`https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/results/${requestId}`);
+          const resultsResponse = await fetch(`${BACKEND_URL}/api/backtest/results/${requestId}`);
           
           if (!resultsResponse.ok) {
             throw new Error(`Erreur results API: ${resultsResponse.status}`);
@@ -115,7 +118,7 @@ const BacktestingModule = ({ data, user }) => {
       };
 
       // Appel API pour lancer le backtesting
-      const response = await fetch('https://oracle-backend-wow-v1-production.up.railway.app/api/backtest/run', {
+      const response = await fetch(`${BACKEND_URL}/api/backtest/run`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
