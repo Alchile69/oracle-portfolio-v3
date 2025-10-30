@@ -1,5 +1,5 @@
 // Service de backtesting pour l'intégration avec Railway backend
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
 
 class BacktestService {
   async runBacktest(config) {

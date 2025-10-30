@@ -3,7 +3,7 @@ import { firebaseService } from '../../services/firebaseService';
 import './BacktestingModule.css';
 
 // URL du backend depuis variable d'environnement
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://oracle-backend-wow-v1-production.up.railway.app';
 
 const BacktestingModule = ({ data, user }) => {
   const [activeTab, setActiveTab] = useState('configuration');
