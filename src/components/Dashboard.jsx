@@ -62,126 +62,111 @@ const Dashboard = ({ user, onNavigate }) => {
     <div className="dashboard-container">
       {/* Header Dashboard */}
       <div className="dashboard-header">
-        <div className="header-content">
-          <h1>📊 Dashboard Oracle Portfolio V3</h1>
-          <p>Vue d'ensemble de votre portefeuille d'investissement</p>
-          <div className="user-info">
-            <span>Utilisateur: {user?.uid ? 'Connecté' : 'Anonyme'}</span>
-            <span>Dernière connexion: {new Date().toLocaleString()}</span>
-          </div>
-        </div>
+        <h1>Dashboard</h1>
+        <p className="dashboard-subtitle">Vue d'ensemble de votre portefeuille</p>
       </div>
 
-      {/* Métriques principales */}
-      <div className="dashboard-metrics">
-        <div className="metric-card primary">
-          <div className="metric-header">
-            <h3>Valeur du Portefeuille</h3>
-            <span className="metric-icon">💰</span>
-          </div>
-          <div className="metric-value">
-            {dashboardData?.portfolioValue?.toLocaleString()}€
-          </div>
-          <div className="metric-change positive">
-            +{dashboardData?.dailyChange}% aujourd'hui
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <div className="metric-header">
-            <h3>Performance Hebdomadaire</h3>
-            <span className="metric-icon">📈</span>
-          </div>
-          <div className="metric-value">
-            +{dashboardData?.weeklyChange}%
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <div className="metric-header">
-            <h3>Performance Mensuelle</h3>
-            <span className="metric-icon">📊</span>
-          </div>
-          <div className="metric-value">
-            +{dashboardData?.monthlyChange}%
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <div className="metric-header">
-            <h3>Actifs Totaux</h3>
-            <span className="metric-icon">🏦</span>
-          </div>
-          <div className="metric-value">
-            {dashboardData?.quickStats?.totalAssets}
-          </div>
-        </div>
-      </div>
-
-      {/* Actions rapides */}
-      <div className="dashboard-actions">
-        <h2>Actions Rapides</h2>
-        <div className="action-cards">
-          <button className="action-card featured" onClick={goToAnalytics}>
-            <div className="action-icon">🧮</div>
-            <div className="action-content">
-              <h3>Analytics WOW V1</h3>
-              <p>Accéder aux analyses avancées avec KPIs, graphiques et backtesting</p>
-              <span className="action-badge">NOUVEAU</span>
+      {/* Section: Valeur du Portefeuille */}
+      <section className="dashboard-section">
+        <h2 className="section-title">Valeur du Portefeuille</h2>
+        <div className="metric-card-large">
+          <div className="metric-main">
+            <div className="metric-value-large">
+              {dashboardData?.portfolioValue?.toLocaleString()}€
             </div>
+            <div className="metric-change positive">
+              <span className="change-indicator">↑</span>
+              <span className="change-value">+{dashboardData?.dailyChange}%</span>
+              <span className="change-period">aujourd'hui</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section: Performance */}
+      <section className="dashboard-section">
+        <h2 className="section-title">Performance</h2>
+        <div className="metrics-grid">
+          <div className="metric-card">
+            <h3 className="metric-label">Performance Hebdomadaire</h3>
+            <div className="metric-value">
+              +{dashboardData?.weeklyChange}%
+            </div>
+          </div>
+
+          <div className="metric-card">
+            <h3 className="metric-label">Performance Mensuelle</h3>
+            <div className="metric-value">
+              +{dashboardData?.monthlyChange}%
+            </div>
+          </div>
+
+          <div className="metric-card">
+            <h3 className="metric-label">Actifs Totaux</h3>
+            <div className="metric-value">
+              {dashboardData?.quickStats?.totalAssets}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section: Actions Rapides */}
+      <section className="dashboard-section">
+        <h2 className="section-title">Actions Rapides</h2>
+        <div className="action-cards">
+          <button className="action-card" onClick={goToAnalytics}>
+            <div className="action-content">
+              <h3 className="action-title">Analytics WOW V1</h3>
+              <p className="action-description">Analyses avancées avec KPIs, graphiques et backtesting</p>
+            </div>
+            <div className="action-arrow">→</div>
           </button>
 
           <button className="action-card" onClick={goToConfiguration}>
-            <div className="action-icon">⚙️</div>
             <div className="action-content">
-              <h3>Configuration</h3>
-              <p>Paramétrer votre portefeuille et vos préférences</p>
+              <h3 className="action-title">Configuration</h3>
+              <p className="action-description">Paramétrer votre portefeuille et vos préférences</p>
             </div>
+            <div className="action-arrow">→</div>
           </button>
 
           <button className="action-card" onClick={() => onNavigate('get-full-access')}>
-            <div className="action-icon">🔓</div>
             <div className="action-content">
-              <h3>Get Full Access</h3>
-              <p>Débloquer toutes les fonctionnalités premium</p>
+              <h3 className="action-title">Get Full Access</h3>
+              <p className="action-description">Débloquer toutes les fonctionnalités premium</p>
             </div>
+            <div className="action-arrow">→</div>
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Notifications */}
-      <div className="dashboard-notifications">
-        <h2>Notifications Récentes</h2>
-        <div className="notifications-list">
-          {dashboardData?.notifications?.map((notification) => (
-            <div key={notification.id} className={`notification ${notification.type}`}>
-              <div className="notification-content">
-                <p>{notification.message}</p>
-                <span className="notification-time">Il y a {notification.time}</span>
+      {/* Section: Activité Récente */}
+      <section className="dashboard-section">
+        <h2 className="section-title">Activité Récente</h2>
+        <div className="activity-card">
+          <div className="activity-list">
+            {dashboardData?.notifications?.map((notification) => (
+              <div key={notification.id} className="activity-item">
+                <div className="activity-content">
+                  <p className="activity-message">{notification.message}</p>
+                  <span className="activity-time">{notification.time}</span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
 
-      {/* Statistiques rapides */}
-      <div className="dashboard-stats">
-        <h2>Statistiques Rapides</h2>
-        <div className="stats-grid">
-          <div className="stat-item">
-            <span className="stat-label">Stratégies Actives</span>
-            <span className="stat-value">{dashboardData?.quickStats?.activeStrategies}</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Dernier Rééquilibrage</span>
-            <span className="stat-value">{dashboardData?.quickStats?.lastRebalance}</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Statut</span>
-            <span className="stat-value status-active">Actif</span>
+          <div className="stats-row">
+            <div className="stat-item">
+              <span className="stat-label">Stratégies Actives</span>
+              <span className="stat-value">{dashboardData?.quickStats?.activeStrategies}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Dernier Rééquilibrage</span>
+              <span className="stat-value">{dashboardData?.quickStats?.lastRebalance}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
