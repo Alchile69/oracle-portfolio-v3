@@ -315,27 +315,27 @@ const BacktestingModule = ({ data, user }) => {
             <div className="results-metrics">
               <div className="metric-card">
                 <div className="metric-label">Rendement Total</div>
-                <div className="metric-value positive">{backtestResults.performance.totalReturn}%</div>
+                <div className="metric-value positive">{backtestResults.totalReturn}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Rendement Annualisé</div>
-                <div className="metric-value positive">{backtestResults.performance.annualizedReturn}%</div>
+                <div className="metric-value positive">{backtestResults.annualizedReturn}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Volatilité</div>
-                <div className="metric-value">{backtestResults.performance.volatility}%</div>
+                <div className="metric-value">{backtestResults.volatility}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Sharpe Ratio</div>
-                <div className="metric-value">{backtestResults.performance.sharpeRatio}</div>
+                <div className="metric-value">{backtestResults.sharpeRatio}</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Max Drawdown</div>
-                <div className="metric-value negative">{backtestResults.performance.maxDrawdown}%</div>
+                <div className="metric-value negative">{backtestResults.maxDrawdown}%</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Win Rate</div>
-                <div className="metric-value">{backtestResults.performance.winRate}%</div>
+                <div className="metric-value">{backtestResults.winRate}%</div>
               </div>
             </div>
             
@@ -344,13 +344,13 @@ const BacktestingModule = ({ data, user }) => {
               <h4>Courbe de Performance</h4>
               <div className="chart-placeholder">
                 <p>📈 Graphique de l'évolution de la valeur du portefeuille</p>
-                <p>Valeur finale: {backtestResults.equity[backtestResults.equity.length - 1]?.value?.toLocaleString()}€</p>
+                <p>Valeur finale: {backtestResults.equityCurve[backtestResults.equityCurve.length - 1]?.value?.toLocaleString()}€</p>
               </div>
             </div>
             
             {/* Comparaison avec benchmark */}
             <div className="benchmark-comparison">
-              <h4>Comparaison avec Benchmark ({backtestResults.config.benchmark})</h4>
+              <h4>Comparaison avec Benchmark ({backtestConfig.benchmark})</h4>
               <div className="comparison-table">
                 <div className="comparison-row">
                   <span>Métrique</span>
@@ -360,15 +360,15 @@ const BacktestingModule = ({ data, user }) => {
                 </div>
                 <div className="comparison-row">
                   <span>Rendement Total</span>
-                  <span>{backtestResults.performance.totalReturn}%</span>
-                  <span>{backtestResults.benchmark.totalReturn}%</span>
-                  <span className="positive">+{(backtestResults.performance.totalReturn - backtestResults.benchmark.totalReturn).toFixed(1)}%</span>
+                  <span>{backtestResults.totalReturn}%</span>
+                  <span>{backtestResults.benchmarkComparison?.total_return || 'N/A'}%</span>
+                  <span className="positive">+{backtestResults.benchmarkComparison ? (backtestResults.totalReturn - backtestResults.benchmarkComparison.total_return).toFixed(1) : 'N/A'}%</span>
                 </div>
                 <div className="comparison-row">
                   <span>Volatilité</span>
-                  <span>{backtestResults.performance.volatility}%</span>
-                  <span>{backtestResults.benchmark.volatility}%</span>
-                  <span className="negative">+{(backtestResults.performance.volatility - backtestResults.benchmark.volatility).toFixed(1)}%</span>
+                  <span>{backtestResults.volatility}%</span>
+                  <span>{backtestResults.benchmarkComparison?.volatility || 'N/A'}%</span>
+                  <span className="negative">+{backtestResults.benchmarkComparison ? (backtestResults.volatility - backtestResults.benchmarkComparison.volatility).toFixed(1) : 'N/A'}%</span>
                 </div>
               </div>
             </div>
