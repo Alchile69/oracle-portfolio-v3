@@ -62,111 +62,147 @@ const Dashboard = ({ user, onNavigate }) => {
     <div className="dashboard-container">
       {/* Header Dashboard */}
       <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        <p className="dashboard-subtitle">Vue d'ensemble de votre portefeuille</p>
+        <h3>📊 Financial Dashboard</h3>
+        <p>Vue d'ensemble de votre portefeuille d'investissement</p>
       </div>
 
-      {/* Section: Valeur du Portefeuille */}
-      <section className="dashboard-section">
-        <h2 className="section-title">Valeur du Portefeuille</h2>
-        <div className="metric-card-large">
-          <div className="metric-main">
-            <div className="metric-value-large">
-              {dashboardData?.portfolioValue?.toLocaleString()}€
-            </div>
-            <div className="metric-change positive">
-              <span className="change-indicator">↑</span>
-              <span className="change-value">+{dashboardData?.dailyChange}%</span>
-              <span className="change-period">aujourd'hui</span>
-            </div>
+      {/* KPI Cards Grid */}
+      <div className="kpi-grid">
+        {/* Valeur Portefeuille */}
+        <div className="kpi-card primary">
+          <div className="kpi-header">
+            <span className="kpi-icon">💰</span>
+            <span className="kpi-label">Valeur Portfolio</span>
+          </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value">{dashboardData?.portfolioValue?.toLocaleString()}€</span>
+          </div>
+          <div className="kpi-change positive">
+            <span>↗️ +{dashboardData?.dailyChange}%</span>
+            <span className="kpi-period">aujourd'hui</span>
           </div>
         </div>
-      </section>
 
-      {/* Section: Performance */}
-      <section className="dashboard-section">
-        <h2 className="section-title">Performance</h2>
-        <div className="metrics-grid">
-          <div className="metric-card">
-            <h3 className="metric-label">Performance Hebdomadaire</h3>
-            <div className="metric-value">
-              +{dashboardData?.weeklyChange}%
-            </div>
+        {/* Performance Hebdo */}
+        <div className="kpi-card success">
+          <div className="kpi-header">
+            <span className="kpi-icon">📈</span>
+            <span className="kpi-label">Performance 7J</span>
           </div>
-
-          <div className="metric-card">
-            <h3 className="metric-label">Performance Mensuelle</h3>
-            <div className="metric-value">
-              +{dashboardData?.monthlyChange}%
-            </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value">+{dashboardData?.weeklyChange}<span className="kpi-suffix">%</span></span>
           </div>
-
-          <div className="metric-card">
-            <h3 className="metric-label">Actifs Totaux</h3>
-            <div className="metric-value">
-              {dashboardData?.quickStats?.totalAssets}
-            </div>
+          <div className="kpi-description">
+            Évolution hebdomadaire
           </div>
         </div>
-      </section>
 
-      {/* Section: Actions Rapides */}
-      <section className="dashboard-section">
-        <h2 className="section-title">Actions Rapides</h2>
+        {/* Performance Mensuelle */}
+        <div className="kpi-card info">
+          <div className="kpi-header">
+            <span className="kpi-icon">📊</span>
+            <span className="kpi-label">Performance 30J</span>
+          </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value">+{dashboardData?.monthlyChange}<span className="kpi-suffix">%</span></span>
+          </div>
+          <div className="kpi-description">
+            Évolution mensuelle
+          </div>
+        </div>
+
+        {/* Actifs Totaux */}
+        <div className="kpi-card warning">
+          <div className="kpi-header">
+            <span className="kpi-icon">🏦</span>
+            <span className="kpi-label">Actifs Totaux</span>
+          </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value">{dashboardData?.quickStats?.totalAssets}</span>
+          </div>
+          <div className="kpi-description">
+            Nombre d'actifs
+          </div>
+        </div>
+
+        {/* Stratégies */}
+        <div className="kpi-card success">
+          <div className="kpi-header">
+            <span className="kpi-icon">🎯</span>
+            <span className="kpi-label">Stratégies</span>
+          </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value">{dashboardData?.quickStats?.activeStrategies}</span>
+          </div>
+          <div className="kpi-description">
+            Stratégies actives
+          </div>
+        </div>
+
+        {/* Dernier rebalance */}
+        <div className="kpi-card info">
+          <div className="kpi-header">
+            <span className="kpi-icon">⚖️</span>
+            <span className="kpi-label">Rééquilibrage</span>
+          </div>
+          <div className="kpi-value-container">
+            <span className="kpi-value" style={{fontSize: '16px'}}>{dashboardData?.quickStats?.lastRebalance}</span>
+          </div>
+          <div className="kpi-description">
+            Dernier rééquilibrage
+          </div>
+        </div>
+      </div>
+
+      {/* Actions Rapides */}
+      <div className="dashboard-section">
+        <h3 className="section-title">⚡ Actions Rapides</h3>
         <div className="action-cards">
           <button className="action-card" onClick={goToAnalytics}>
+            <div className="action-icon">🧮</div>
             <div className="action-content">
-              <h3 className="action-title">Analytics WOW V1</h3>
-              <p className="action-description">Analyses avancées avec KPIs, graphiques et backtesting</p>
+              <h4>Analytics WOW V1</h4>
+              <p>Analyses avancées avec KPIs, graphiques et backtesting</p>
             </div>
-            <div className="action-arrow">→</div>
           </button>
 
           <button className="action-card" onClick={goToConfiguration}>
+            <div className="action-icon">⚙️</div>
             <div className="action-content">
-              <h3 className="action-title">Configuration</h3>
-              <p className="action-description">Paramétrer votre portefeuille et vos préférences</p>
+              <h4>Configuration</h4>
+              <p>Paramétrer votre portefeuille et vos préférences</p>
             </div>
-            <div className="action-arrow">→</div>
           </button>
 
           <button className="action-card" onClick={() => onNavigate('get-full-access')}>
+            <div className="action-icon">🔓</div>
             <div className="action-content">
-              <h3 className="action-title">Get Full Access</h3>
-              <p className="action-description">Débloquer toutes les fonctionnalités premium</p>
+              <h4>Get Full Access</h4>
+              <p>Débloquer toutes les fonctionnalités premium</p>
             </div>
-            <div className="action-arrow">→</div>
           </button>
         </div>
-      </section>
+      </div>
 
-      {/* Section: Activité Récente */}
-      <section className="dashboard-section">
-        <h2 className="section-title">Activité Récente</h2>
-        <div className="activity-card">
-          <div className="activity-list">
-            {dashboardData?.notifications?.map((notification) => (
-              <div key={notification.id} className="activity-item">
-                <div className="activity-content">
-                  <p className="activity-message">{notification.message}</p>
-                  <span className="activity-time">{notification.time}</span>
-                </div>
+      {/* Notifications */}
+      <div className="dashboard-section">
+        <h3 className="section-title">🔔 Notifications Récentes</h3>
+        <div className="notifications-list">
+          {dashboardData?.notifications?.map((notification) => (
+            <div key={notification.id} className={`notification-item ${notification.type}`}>
+              <div className="notification-icon">
+                {notification.type === 'info' && 'ℹ️'}
+                {notification.type === 'success' && '✅'}
+                {notification.type === 'warning' && '⚠️'}
               </div>
-            ))}
-          </div>
-
-          <div className="stats-row">
-            <div className="stat-item">
-              <span className="stat-label">Stratégies Actives</span>
-              <span className="stat-value">{dashboardData?.quickStats?.activeStrategies}</span>
+              <div className="notification-content">
+                <p>{notification.message}</p>
+                <span className="notification-time">Il y a {notification.time}</span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">Dernier Rééquilibrage</span>
-              <span className="stat-value">{dashboardData?.quickStats?.lastRebalance}</span>
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
